@@ -1,0 +1,1616 @@
+{
+  "schema_version": 1,
+  "evaluated_at_utc": "2026-10-11T12:51:33.446306+00:00",
+  "source_sha256": {
+    "tennispose/pose_detector.py": "9a8c1ec918e1ae9c19419037c518ded084b94b41cc1b2b04ce30b4de1440bcb8",
+    "tennispose/pose_math.py": "7c4bc3871b524b4b4450627c98ec799c57048170e8512261e5217c703f72fc84",
+    "tennispose/annotate.py": "faceb64cb9ea137686d861981bcaf9a2cff06233a62cd4eddce7415b05b77bcd",
+    "tennispose/evaluation.py": "156a2c5278e4229e4c332f44ed0932e853c81d2df5c2856464b9c3acedcb7709",
+    "scripts/evaluate_photos.py": "8ad82ac8f1de48485cd47ba6bfbe1d667634629cd0ae2307034691d6d42aacbb"
+  },
+  "model_sha256": "64437af838a65d18e5ba7a0d39b465540069bc8aae8308de3e318aad31fcbc7b",
+  "range": [
+    80,
+    120
+  ],
+  "player_focus": false,
+  "summary": {
+    "photos": 45,
+    "accepted": 5,
+    "accepted_coverage": 0.1111111111111111,
+    "visually_labelled_preparation": 15,
+    "preparation_accepted": 4,
+    "preparation_coverage": 0.26666666666666666,
+    "visually_labelled_unsuitable": 28,
+    "unsuitable_false_acceptances": 0,
+    "unsuitable_false_acceptance_rate": 0.0,
+    "accepted_wrong_arm": 0,
+    "accepted_unknown_label_arm": 0,
+    "coach_proxy": {
+      "labelled": 0,
+      "analyzed": 0,
+      "accepted_same_arm": 0,
+      "refused": 0,
+      "wrong_or_unknown_arm_excluded": 0,
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "tn": 0,
+      "precision": null,
+      "recall_among_accepted": null,
+      "agreement_among_accepted": null,
+      "scope": "elbow-range green proxy; not a trained full-form classifier"
+    },
+    "measured_3d": {
+      "labelled": 0,
+      "accepted_same_arm": 0,
+      "mean_absolute_error_degrees": null,
+      "median_absolute_error_degrees": null,
+      "maximum_absolute_error_degrees": null
+    }
+  },
+  "groups": {
+    "heldout-commons-h04.jpg": {
+      "photos": 1,
+      "accepted": 1,
+      "accepted_coverage": 1.0,
+      "visually_labelled_preparation": 1,
+      "preparation_accepted": 1,
+      "preparation_coverage": 1.0,
+      "visually_labelled_unsuitable": 0,
+      "unsuitable_false_acceptances": 0,
+      "unsuitable_false_acceptance_rate": null,
+      "accepted_wrong_arm": 0,
+      "accepted_unknown_label_arm": 0,
+      "coach_proxy": {
+        "labelled": 0,
+        "analyzed": 0,
+        "accepted_same_arm": 0,
+        "refused": 0,
+        "wrong_or_unknown_arm_excluded": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": null,
+        "recall_among_accepted": null,
+        "agreement_among_accepted": null,
+        "scope": "elbow-range green proxy; not a trained full-form classifier"
+      },
+      "measured_3d": {
+        "labelled": 0,
+        "accepted_same_arm": 0,
+        "mean_absolute_error_degrees": null,
+        "median_absolute_error_degrees": null,
+        "maximum_absolute_error_degrees": null
+      }
+    },
+    "heldout-commons-h05.jpg": {
+      "photos": 1,
+      "accepted": 0,
+      "accepted_coverage": 0.0,
+      "visually_labelled_preparation": 0,
+      "preparation_accepted": 0,
+      "preparation_coverage": null,
+      "visually_labelled_unsuitable": 1,
+      "unsuitable_false_acceptances": 0,
+      "unsuitable_false_acceptance_rate": 0.0,
+      "accepted_wrong_arm": 0,
+      "accepted_unknown_label_arm": 0,
+      "coach_proxy": {
+        "labelled": 0,
+        "analyzed": 0,
+        "accepted_same_arm": 0,
+        "refused": 0,
+        "wrong_or_unknown_arm_excluded": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": null,
+        "recall_among_accepted": null,
+        "agreement_among_accepted": null,
+        "scope": "elbow-range green proxy; not a trained full-form classifier"
+      },
+      "measured_3d": {
+        "labelled": 0,
+        "accepted_same_arm": 0,
+        "mean_absolute_error_degrees": null,
+        "median_absolute_error_degrees": null,
+        "maximum_absolute_error_degrees": null
+      }
+    },
+    "heldout-commons-h06.jpg": {
+      "photos": 1,
+      "accepted": 0,
+      "accepted_coverage": 0.0,
+      "visually_labelled_preparation": 0,
+      "preparation_accepted": 0,
+      "preparation_coverage": null,
+      "visually_labelled_unsuitable": 1,
+      "unsuitable_false_acceptances": 0,
+      "unsuitable_false_acceptance_rate": 0.0,
+      "accepted_wrong_arm": 0,
+      "accepted_unknown_label_arm": 0,
+      "coach_proxy": {
+        "labelled": 0,
+        "analyzed": 0,
+        "accepted_same_arm": 0,
+        "refused": 0,
+        "wrong_or_unknown_arm_excluded": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": null,
+        "recall_among_accepted": null,
+        "agreement_among_accepted": null,
+        "scope": "elbow-range green proxy; not a trained full-form classifier"
+      },
+      "measured_3d": {
+        "labelled": 0,
+        "accepted_same_arm": 0,
+        "mean_absolute_error_degrees": null,
+        "median_absolute_error_degrees": null,
+        "maximum_absolute_error_degrees": null
+      }
+    },
+    "legacy-reference-development": {
+      "photos": 10,
+      "accepted": 3,
+      "accepted_coverage": 0.3,
+      "visually_labelled_preparation": 5,
+      "preparation_accepted": 3,
+      "preparation_coverage": 0.6,
+      "visually_labelled_unsuitable": 5,
+      "unsuitable_false_acceptances": 0,
+      "unsuitable_false_acceptance_rate": 0.0,
+      "accepted_wrong_arm": 0,
+      "accepted_unknown_label_arm": 0,
+      "coach_proxy": {
+        "labelled": 0,
+        "analyzed": 0,
+        "accepted_same_arm": 0,
+        "refused": 0,
+        "wrong_or_unknown_arm_excluded": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": null,
+        "recall_among_accepted": null,
+        "agreement_among_accepted": null,
+        "scope": "elbow-range green proxy; not a trained full-form classifier"
+      },
+      "measured_3d": {
+        "labelled": 0,
+        "accepted_same_arm": 0,
+        "mean_absolute_error_degrees": null,
+        "median_absolute_error_degrees": null,
+        "maximum_absolute_error_degrees": null
+      }
+    },
+    "murray-correlated-event": {
+      "photos": 3,
+      "accepted": 0,
+      "accepted_coverage": 0.0,
+      "visually_labelled_preparation": 1,
+      "preparation_accepted": 0,
+      "preparation_coverage": 0.0,
+      "visually_labelled_unsuitable": 2,
+      "unsuitable_false_acceptances": 0,
+      "unsuitable_false_acceptance_rate": 0.0,
+      "accepted_wrong_arm": 0,
+      "accepted_unknown_label_arm": 0,
+      "coach_proxy": {
+        "labelled": 0,
+        "analyzed": 0,
+        "accepted_same_arm": 0,
+        "refused": 0,
+        "wrong_or_unknown_arm_excluded": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": null,
+        "recall_among_accepted": null,
+        "agreement_among_accepted": null,
+        "scope": "elbow-range green proxy; not a trained full-form classifier"
+      },
+      "measured_3d": {
+        "labelled": 0,
+        "accepted_same_arm": 0,
+        "mean_absolute_error_degrees": null,
+        "median_absolute_error_degrees": null,
+        "maximum_absolute_error_degrees": null
+      }
+    },
+    "taipei-serve-v1-single-source": {
+      "photos": 29,
+      "accepted": 1,
+      "accepted_coverage": 0.034482758620689655,
+      "visually_labelled_preparation": 8,
+      "preparation_accepted": 0,
+      "preparation_coverage": 0.0,
+      "visually_labelled_unsuitable": 19,
+      "unsuitable_false_acceptances": 0,
+      "unsuitable_false_acceptance_rate": 0.0,
+      "accepted_wrong_arm": 0,
+      "accepted_unknown_label_arm": 0,
+      "coach_proxy": {
+        "labelled": 0,
+        "analyzed": 0,
+        "accepted_same_arm": 0,
+        "refused": 0,
+        "wrong_or_unknown_arm_excluded": 0,
+        "tp": 0,
+        "fp": 0,
+        "fn": 0,
+        "tn": 0,
+        "precision": null,
+        "recall_among_accepted": null,
+        "agreement_among_accepted": null,
+        "scope": "elbow-range green proxy; not a trained full-form classifier"
+      },
+      "measured_3d": {
+        "labelled": 0,
+        "accepted_same_arm": 0,
+        "mean_absolute_error_degrees": null,
+        "median_absolute_error_degrees": null,
+        "maximum_absolute_error_degrees": null
+      }
+    }
+  },
+  "cases": [
+    {
+      "label": {
+        "file": "reference-photos/01_dominic_pagon.jpg",
+        "group": "legacy-reference-development",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "3ca37267fe42e02e9d5d54aa722de0780e5b75480d27243127c953c5dd184e4c",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/02_mcenroe_serve.jpg",
+        "group": "legacy-reference-development",
+        "preparation": true,
+        "arm": "left",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "ec4733fd5cd51bdc19b5d13bfa3ed38031b7a6623d87446749bbbd8b2c76e130",
+      "report": {
+        "status": "analyzed",
+        "arm": "left",
+        "angle_degrees": 100.8,
+        "in_demo_range": true,
+        "message": "Elbow estimate is within the selected range.",
+        "confidence": "high",
+        "spread_degrees": 7.1,
+        "sample_count": 5,
+        "projected_angle_degrees": 78.5,
+        "arm_was_detected": true,
+        "reason_code": "",
+        "minimum_angle_degrees": 98.2,
+        "maximum_angle_degrees": 105.3,
+        "attempted_passes": 5,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/03_jelena_ostapenko.jpg",
+        "group": "legacy-reference-development",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "c7062417108bccc0ac45ac8a3ad64a7e63a1a392ebf9cf3b735dc0cf4ef06fe5",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/04_carlos_alcaraz.jpg",
+        "group": "legacy-reference-development",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "3e8af95bf22b196800eb81c0bd3529f96e592c915273f84bc8b1af4211279aff",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": "right",
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The measurement was not stable enough to report a result. 5 valid passes survived; their full spread was 33.7 degrees. At least three passes and a spread of at most 20 degrees are required. A clear side-on photo gives a steadier estimate.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "unstable",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/05_gokberk_ergeneman.jpg",
+        "group": "legacy-reference-development",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "24c5f9f333925f5202ef42ab36a6513aba26b50ff641d7e5568d4ba617812643",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/06_nicolas_mahut.jpg",
+        "group": "legacy-reference-development",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "91088cba4fc150c9cb45d701fc3f473f9a4d29a630d286bf37a305c456fae81c",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/07_tommy_haas.jpg",
+        "group": "legacy-reference-development",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "9001467ff713576937ab8e0e02563bd362107751c040cb14e31b2fc64332157b",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/08_federer_trophy_pose.jpg",
+        "group": "legacy-reference-development",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "08729261b1c30a0a888b3e26cd64974ce808e9d019153d1e07eb8991c4634e8f",
+      "report": {
+        "status": "analyzed",
+        "arm": "right",
+        "angle_degrees": 85.3,
+        "in_demo_range": true,
+        "message": "Elbow estimate is within the selected range.",
+        "confidence": "moderate",
+        "spread_degrees": 9.2,
+        "sample_count": 5,
+        "projected_angle_degrees": 47.6,
+        "arm_was_detected": true,
+        "reason_code": "",
+        "minimum_angle_degrees": 81.4,
+        "maximum_angle_degrees": 90.7,
+        "attempted_passes": 5,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/09_djokovic_trophy_pose.jpg",
+        "group": "legacy-reference-development",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "15f63a211af4b8d8773c8b7c21966629091cbe38569f612e55e92b1d4f918544",
+      "report": {
+        "status": "analyzed",
+        "arm": "right",
+        "angle_degrees": 111.6,
+        "in_demo_range": true,
+        "message": "Elbow estimate is within the selected range.",
+        "confidence": "moderate",
+        "spread_degrees": 12.2,
+        "sample_count": 5,
+        "projected_angle_degrees": 69.3,
+        "arm_was_detected": true,
+        "reason_code": "",
+        "minimum_angle_degrees": 100.9,
+        "maximum_angle_degrees": 113.2,
+        "attempted_passes": 5,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "reference-photos/10_sharapova_serve.jpg",
+        "group": "legacy-reference-development",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection; reused development input",
+        "license_source": "docs/demo-assets/README.md"
+      },
+      "input_sha256": "ae7b28d496fe1d5a8f9e9ffb1b33cfafeea19ad75f3a7905717a2f535d249520",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "teaching-photos/h01.jpg",
+        "group": "murray-correlated-event",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection recorded before first inference; phase/arm only",
+        "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+      },
+      "input_sha256": "a9cbda01c389096c70795e71309f547a956387ea7f40d8311e9593847ad1331d",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "teaching-photos/h02.jpg",
+        "group": "murray-correlated-event",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection recorded before first inference; phase/arm only",
+        "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+      },
+      "input_sha256": "cf0161ddc98eb80f2f3660a927606873c36a11df4d295193179c6cdc5bd8a5a8",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "teaching-photos/h03.jpg",
+        "group": "murray-correlated-event",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection recorded before first inference; phase/arm only",
+        "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+      },
+      "input_sha256": "46b9ac4bf527134a0cf36363e459afb553133c7ee0036e5a7d191e97e2c5bf7c",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "teaching-photos/h04.jpg",
+        "group": "heldout-commons-h04.jpg",
+        "preparation": true,
+        "arm": "left",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection recorded before first inference; phase/arm only",
+        "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+      },
+      "input_sha256": "d759089484dae6273781f0e0b3a0aee28ec44a57da4ad0b339336f4a593b3e88",
+      "report": {
+        "status": "analyzed",
+        "arm": "left",
+        "angle_degrees": 102.0,
+        "in_demo_range": true,
+        "message": "Elbow estimate is within the selected range.",
+        "confidence": "high",
+        "spread_degrees": 1.9,
+        "sample_count": 5,
+        "projected_angle_degrees": 66.4,
+        "arm_was_detected": true,
+        "reason_code": "",
+        "minimum_angle_degrees": 100.9,
+        "maximum_angle_degrees": 102.7,
+        "attempted_passes": 5,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "teaching-photos/h05.jpg",
+        "group": "heldout-commons-h05.jpg",
+        "preparation": false,
+        "arm": null,
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection recorded before first inference; phase/arm only",
+        "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+      },
+      "input_sha256": "c0f105616f85ec56a788ac709a9b1f2a1864440f991fa9a9f18745694896e2b3",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Neither arm was clearly enough visible to measure. Use a brighter, sharper photo with both arms unobstructed.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_reliable_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "teaching-photos/h06.jpg",
+        "group": "heldout-commons-h06.jpg",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection recorded before first inference; phase/arm only",
+        "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+      },
+      "input_sha256": "92defbb12b43b44e6f57c460968ba15458113849e2a8ac1fdd7c598b8ed7cad0",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_001.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "1766625410e10a3bba9dd6144d401d0b70c1c9e88a8136385047900ba8f8ee45",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_010.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "eb9c82e6a9f5a5d20db7f891125081fb6f497a98438dfdcd8b7c87538d9d33c6",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Neither arm was clearly enough visible to measure. Use a brighter, sharper photo with both arms unobstructed.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_reliable_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_020.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "91b3cdb6671ccc0afd52e1a0643ab1d7bda1410679a6056ea5db96322f2c775c",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_030.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "00abf8818b4922c2241b0b9636ebb7244ea057bba6f55f5f03ac3f0d5c8fab87",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": "right",
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The measurement was not stable enough to report a result. 5 valid passes survived; their full spread was 20.1 degrees. At least three passes and a spread of at most 20 degrees are required. A clear side-on photo gives a steadier estimate.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "unstable",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_040.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "9bdd4cb0177a9e7c72f23304b3da6e594791f5761732c2bf0d5c989d6c7cdeab",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_050.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "75a3ba4374b8a4613e259e6c601e128299fd3bbebdd19a607bfe9b1053f28682",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_060.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "24a2c9e151f0c961d4d5f9eeb3e6ba19f9e166cd5b679ebce6350e7fcdda991a",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Neither arm was clearly enough visible to measure. Use a brighter, sharper photo with both arms unobstructed.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_reliable_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_080.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "b255a78513b83ed2c6944b6b5b4bd8407d0d7702a032484141ca5ef2310423ac",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": "right",
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The repeat readings cross a target boundary; no red/green verdict is supported. Try a clearer view or review the chosen target range.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "borderline",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_100.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "d4eb7463efc3f952345e56136d25037fabf210c5c05ed4c2adabd15b6a8fcecc",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_120.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "c730b072a3601da0af1bc0a801f2314ca9fe32448652111af062f2221fcfbd9a",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": "right",
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The measurement was not stable enough to report a result. 5 valid passes survived; their full spread was 22.9 degrees. At least three passes and a spread of at most 20 degrees are required. A clear side-on photo gives a steadier estimate.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "unstable",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_140.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "ace408f9dedd49748a0fce65aafa62a491121b9dd9e21ab9e7e1231632916f67",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_160.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": null,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "48d0994c73ef1fec8c0182c54abda6e4293a988a2bcb132ac53f086350b52940",
+      "report": {
+        "status": "analyzed",
+        "arm": "right",
+        "angle_degrees": 126.7,
+        "in_demo_range": false,
+        "message": "Elbow estimate is above the selected range (straighter).",
+        "confidence": "moderate",
+        "spread_degrees": 2.6,
+        "sample_count": 4,
+        "projected_angle_degrees": 102.8,
+        "arm_was_detected": true,
+        "reason_code": "",
+        "minimum_angle_degrees": 126.0,
+        "maximum_angle_degrees": 128.6,
+        "attempted_passes": 5,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_180.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "0d1739cc10b5438fec13e7acf0375b5e779f02083f0faefa86d0bc42e8487faa",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_200.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "e3c683d2b67a9249346421cfdb92d3906f06c07083d9e16043b1bfafcf6792db",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": "right",
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The measurement was not stable enough to report a result. 4 valid passes survived; their full spread was 24.5 degrees. At least three passes and a spread of at most 20 degrees are required. A clear side-on photo gives a steadier estimate.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "unstable",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_220.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": null,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "6f7af2069acc13f78b2aed54d4aaf923778b5b3c61708a7a1589c6e4edee8731",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "No person was detected in this photo. Use a photo where one whole player is clearly visible.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_240.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "66357924813c8303f462bd65a45e85ec2574e6f31f2d33a342e2ec0513a94200",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_260.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "443d18ce0450236878fb31e67853461f363a1ec340c953c90ee7092183adde0b",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": "right",
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The measurement was not stable enough to report a result. 1 valid passes survived; their full spread was 0.0 degrees. At least three passes and a spread of at most 20 degrees are required. A clear side-on photo gives a steadier estimate.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "unstable",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_280.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "14895c945440867cd683e2bafc7f19e515d8521c684b8e462868abf095c33eb7",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_300.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "69e3252400501d95154d0fc128a6821aece6fd7f80af5df7550eccd94d5fa431",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": "right",
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The measurement was not stable enough to report a result. 5 valid passes survived; their full spread was 34.5 degrees. At least three passes and a spread of at most 20 degrees are required. A clear side-on photo gives a steadier estimate.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "unstable",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_320.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": true,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "5864821e6269eb315c2e0a051f437697be67a4016aeec946fc338e4119bacb64",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_340.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "4a2f6e502ad65fcb694374161b45a2c902ed0efd9774c0852a873e38a2b8a970",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_360.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "cb12cec37c26b131c99c39bd16a473168415ddc24f9eeb91ad0479a2f6d04e43",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Neither arm was clearly enough visible to measure. Use a brighter, sharper photo with both arms unobstructed.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_reliable_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_380.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "07b4435f0c5a696e2861b62cb436be10c4e5eca39dd965acf76bc1544494ae0d",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "No person was detected in this photo. Use a photo where one whole player is clearly visible.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_400.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "6a14d5e73a07181cb30a7bae58523bf0bec4535052665bb88f41def833ff3f3e",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "Both arms must be visible to verify the serve preparation. Use a photo showing both the racket arm and tossing arm.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "ambiguous_arm",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_420.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "4e9da929d738e0edd7ffa24d9adfabfd8d99ca17503529a7fe25d3aafb91997a",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "The player is too small or too cropped to measure. Fill more of the frame with the player, from head to hips.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_scale",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_440.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "54cb14cbf28767fdaea0f8923e7bd0470a6e00211157491c541b134368a2240d",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_460.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "eff1789227d5381fe6eb5bc89e02a0560e06b4dd5186b3a94c7e31c6cf71341b",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "No person was detected in this photo. Use a photo where one whole player is clearly visible.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "no_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_480.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "61205443a6254bafe6e5da1621d4c5007c2465dc6a5ee6c1581ff3cd1bec7c1e",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    },
+    {
+      "label": {
+        "file": "taipei/images/serve/S_500.jpeg",
+        "group": "taipei-serve-v1-single-source",
+        "preparation": false,
+        "arm": "right",
+        "coach_verdict": null,
+        "measured_angle_degrees": null,
+        "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+        "license_source": "docs/demo-assets/taipei/manifest.json"
+      },
+      "input_sha256": "1bd19e4c6b943a966b8b5511348b80c8b1e9af1964a17c02d21422c4a66a82f9",
+      "report": {
+        "status": "cannot_analyze",
+        "arm": null,
+        "angle_degrees": null,
+        "in_demo_range": null,
+        "message": "This photo does not provide clear trophy-position preparation cues. Show the racket forearm rising near the shoulder and the opposite hand raised. Ready stance, contact, and follow-through frames cannot be scored here.",
+        "confidence": null,
+        "spread_degrees": null,
+        "sample_count": 0,
+        "projected_angle_degrees": null,
+        "arm_was_detected": false,
+        "reason_code": "not_trophy_pose",
+        "minimum_angle_degrees": null,
+        "maximum_angle_degrees": null,
+        "attempted_passes": 0,
+        "focused_on_player": false
+      }
+    }
+  ]
+}
