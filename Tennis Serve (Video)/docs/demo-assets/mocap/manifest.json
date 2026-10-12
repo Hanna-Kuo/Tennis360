@@ -1,0 +1,29 @@
+{
+  "license": "CC BY-SA 3.0",
+  "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+  "source_repository": "https://github.com/jdpulgarin/Tennis-MoCap",
+  "upstream_commit": "9af88bb4df4e78b22127719744fdca993ced2733",
+  "sources": [
+    {
+      "file": "adorozco_Servicio.bvh",
+      "player_group": "RP",
+      "source_url": "https://raw.githubusercontent.com/jdpulgarin/Tennis-MoCap/9af88bb4df4e78b22127719744fdca993ced2733/data/adorozco_Servicio.bvh",
+      "sha256": "dc5712bf8c67a249393ca549741ea375cc98e9a8c0eb0dd4fac18b0bdb97f6d0",
+      "bytes": 2238656
+    },
+    {
+      "file": "jarua_Servicio.bvh",
+      "player_group": "HP",
+      "source_url": "https://raw.githubusercontent.com/jdpulgarin/Tennis-MoCap/9af88bb4df4e78b22127719744fdca993ced2733/data/jarua_Servicio.bvh",
+      "sha256": "8f9ca7c6113debe1d713632144a592c9ed51e4cba2870f159517b0af90b14af6",
+      "bytes": 2251710
+    }
+  ],
+  "limits": [
+    "Measured optical motion capture processed to BVH skeletons; BVH reconstructed joint centers are not raw marker coordinates.",
+    "No paired RGB photos or videos in downloaded repository tree.",
+    "Regular/high-performance labels refer to participants, not correct/incorrect Trophy Pose labels.",
+    "No serve-instance or Trophy Pose frame annotations.",
+    "Not calibrated validation for MediaPipe photo inference."
+  ]
+}
