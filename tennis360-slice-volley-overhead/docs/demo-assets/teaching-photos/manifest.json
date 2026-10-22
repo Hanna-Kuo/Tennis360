@@ -1,0 +1,116 @@
+{
+  "license_scope": "Each image retains the individual CC terms below.",
+  "sources": [
+    {
+      "id": "h01.jpg",
+      "title": "File:Andy Murray Serve Part 1.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Andy_Murray_Serve_Part_1.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Andy_Murray_Serve_Part_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Nick Hewson",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "download_url": "https://live.staticflickr.com/5288/5373587547_cf492f8d27_b.jpg",
+      "bytes": 163846,
+      "dimensions": [
+        681,
+        1023
+      ],
+      "upstream_sha256": "0c8b68dfe8ecf50d85248fcda6a44f0d5c578fb5669443a8f1e2ed3dffd079da",
+      "sha256": "a9cbda01c389096c70795e71309f547a956387ea7f40d8311e9593847ad1331d",
+      "modification": "EXIF and Photoshop metadata removed losslessly; decoded RGB pixels unchanged."
+    },
+    {
+      "id": "h02.jpg",
+      "title": "File:Andy Murray serve part 2.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Andy_Murray_serve_part_2.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/e/eb/Andy_Murray_serve_part_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Nick Hewson",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "download_url": "https://live.staticflickr.com/5045/5374183784_8afbfe8828_b.jpg",
+      "bytes": 126105,
+      "dimensions": [
+        680,
+        1024
+      ],
+      "upstream_sha256": "9d3ebc5bd1fbb072f0c703db1fe87d9bf0e2aa4c60474349f3a863d11ddb8b8b",
+      "sha256": "cf0161ddc98eb80f2f3660a927606873c36a11df4d295193179c6cdc5bd8a5a8",
+      "modification": "EXIF and Photoshop metadata removed losslessly; decoded RGB pixels unchanged."
+    },
+    {
+      "id": "h03.jpg",
+      "title": "File:Andy Murray serve part 3.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Andy_Murray_serve_part_3.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/4/41/Andy_Murray_serve_part_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Nick Hewson",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "download_url": "https://live.staticflickr.com/5244/5373578143_1ed8ffb29d_b.jpg",
+      "bytes": 123875,
+      "dimensions": [
+        683,
+        1024
+      ],
+      "upstream_sha256": "de3adbe2d1747cf07093e675b903d63e444b6c5606c9b07ec49267a0e7471656",
+      "sha256": "46b9ac4bf527134a0cf36363e459afb553133c7ee0036e5a7d191e97e2c5bf7c",
+      "modification": "EXIF and Photoshop metadata removed losslessly; decoded RGB pixels unchanged."
+    },
+    {
+      "id": "h04.jpg",
+      "title": "File:Nadal Serving.jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Nadal_Serving.jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/5/59/Nadal_Serving.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Donna and Keith",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "download_url": "https://live.staticflickr.com/94/234527592_eb5ee32807_o.jpg",
+      "bytes": 671625,
+      "dimensions": [
+        2288,
+        1712
+      ],
+      "note": "Downloaded Flickr original; Commons reference is a cropped derivative by Quadzilla99.",
+      "upstream_sha256": "decd24b0a44b2a7981f1907aa47420081e3f322c7614c8021639eba91d762ca7",
+      "sha256": "d759089484dae6273781f0e0b3a0aee28ec44a57da4ad0b339336f4a593b3e88",
+      "modification": "EXIF and Photoshop metadata removed losslessly; decoded RGB pixels unchanged."
+    },
+    {
+      "id": "h05.jpg",
+      "title": "File:Nadal lefty serve (4944616391).jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Nadal_lefty_serve_(4944616391).jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/2/22/Nadal_lefty_serve_%284944616391%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "JC",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+      "download_url": "https://live.staticflickr.com/4097/4944616391_89440a3b9a_o.jpg",
+      "bytes": 3024161,
+      "dimensions": [
+        3264,
+        2448
+      ],
+      "note": "Filename is not a phase/arm label. Foreground spectator dominates; actual server is small in background.",
+      "upstream_sha256": "5fbc4b18d602a2fae201c499e949825804eb774b547828fc9957af7003e08ef3",
+      "sha256": "c0f105616f85ec56a788ac709a9b1f2a1864440f991fa9a9f18745694896e2b3",
+      "modification": "EXIF and Photoshop metadata removed losslessly; decoded RGB pixels unchanged."
+    },
+    {
+      "id": "h06.jpg",
+      "title": "File:Sloane Stephens serves at the US Open (9662688451) (cropped).jpg",
+      "source": "https://commons.wikimedia.org/wiki/File:Sloane_Stephens_serves_at_the_US_Open_(9662688451)_(cropped).jpg",
+      "original_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Sloane_Stephens_serves_at_the_US_Open_%289662688451%29_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "author": "Boss Tweed from New York",
+      "license": "CC BY 2.0",
+      "license_url": "https://creativecommons.org/licenses/by/2.0",
+      "download_url": "https://live.staticflickr.com/7400/9662688451_98a55cfbed_b.jpg",
+      "note": "Downloaded Flickr uncropped variant of same source photo, not Commons cropped variant.",
+      "bytes": 165189,
+      "dimensions": [
+        1024,
+        683
+      ],
+      "upstream_sha256": "03694fb3364257bf6b1107a53c92fef48c8f979b43e70c08ef9fda00142308d8",
+      "sha256": "92defbb12b43b44e6f57c460968ba15458113849e2a8ac1fdd7c598b8ed7cad0",
+      "modification": "EXIF and Photoshop metadata removed losslessly; decoded RGB pixels unchanged."
+    }
+  ]
+}
