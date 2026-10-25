@@ -1,6 +1,0 @@
-# Preserve exact upstream bytes used by licensed-data checksum verification.
-docs/demo-assets/mocap/*.bvh -text -diff
-docs/demo-assets/taipei/annotations/serve.json -text
-
-# Keep derived teaching tables consistent across classroom machines.
-docs/demo-assets/evaluation-*/mocap-elbow-angles.csv text eol=lf
