@@ -1,0 +1,115 @@
+- generic [ref=e2]:
+  - generic [ref=e11]:
+    - heading "Analysis settings" [level=2] [ref=e15]
+    - generic [ref=e17]:
+      - paragraph [ref=e21]: Arm to inspect
+      - radiogroup "Arm to inspect" [ref=e22] [cursor=pointer]:
+        - generic [ref=e23]:
+          - radio "Auto-detect racket arm" [checked]
+          - paragraph [ref=e28]: Auto-detect racket arm
+        - generic [ref=e29]:
+          - radio "Player's right arm"
+          - paragraph [ref=e34]: Player's right arm
+        - generic [ref=e35]:
+          - radio "Player's left arm"
+          - paragraph [ref=e40]: Player's left arm
+    - paragraph [ref=e45]: At the trophy position the tossing arm is straight and high while the racket arm is bent near shoulder height. Auto-detect uses that difference; manual selection still requires preparation cues.
+    - generic [ref=e48]:
+      - generic [ref=e49]:
+        - paragraph [ref=e52]: Target elbow range (degrees)
+        - button "Help for Target elbow range (degrees)" [ref=e56] [cursor=pointer]
+      - generic [ref=e60]:
+        - generic [ref=e63]:
+          - slider "Target elbow range (degrees)" [ref=e64]:
+            - generic:
+              - generic:
+                - paragraph: "80"
+          - slider "Target elbow range (degrees)" [ref=e65]:
+            - generic:
+              - generic:
+                - paragraph: "120"
+        - generic:
+          - generic:
+            - paragraph: "40"
+          - generic:
+            - paragraph: "180"
+    - separator [ref=e71]
+    - paragraph [ref=e76]: One uploaded photo is processed in the local Python app. Application code does not save it or upload it to a cloud service.
+    - generic [ref=e78]:
+      - generic [ref=e79]:
+        - paragraph [ref=e82]: Upload a Trophy Pose photo
+        - button "Help for Upload a Trophy Pose photo" [ref=e86] [cursor=pointer]
+      - region "Upload a Trophy Pose photo" [ref=e90] [cursor=pointer]:
+        - button "Choose File" [ref=e91]
+        - generic [ref=e93]:
+          - generic [ref=e94]: Drag and drop file here
+          - generic [ref=e95]: Limit 10MB per file • JPG, JPEG, PNG
+        - button "Browse files" [ref=e97]
+      - list [ref=e148]:
+        - listitem [ref=e149]:
+          - generic [ref=e150]:
+            - generic [ref=e155]:
+              - generic "S_030.jpeg" [ref=e156]
+              - generic [ref=e157]: 227.8KB
+            - button "Remove S_030.jpeg" [ref=e159] [cursor=pointer]
+  - generic [ref=e3]:
+    - banner [ref=e100]:
+      - generic [ref=e103]:
+        - button "Deploy" [ref=e105] [cursor=pointer]
+        - button [ref=e109] [cursor=pointer]
+    - generic [ref=e113]:
+      - heading "🎾 TennisPose" [level=1] [ref=e118]:
+        - text: 🎾 TennisPose
+        - generic [ref=e119]:
+          - link "Link to heading":
+            - /url: "#tennis-pose"
+      - paragraph [ref=e124]: Upload one serve photo. TennisPose finds the shoulder, elbow, and wrist, estimates the racket-arm elbow angle in 3D, and shows green, red, or cannot-analyze.
+      - paragraph [ref=e166]: A fixed local crop focuses the small player. The displayed image is this crop; cropping does not establish angle accuracy.
+      - generic [ref=e168]:
+        - generic [ref=e173]:
+          - paragraph [ref=e177]: Estimated elbow angle
+          - paragraph [ref=e181]: 104.0°
+        - generic [ref=e186]:
+          - paragraph [ref=e190]: Result
+          - paragraph [ref=e194]: 🟢 Green
+        - generic [ref=e199]:
+          - paragraph [ref=e203]: Target range
+          - paragraph [ref=e207]: 80°–120°
+      - alert [ref=e210]:
+        - paragraph [ref=e215]:
+          - strong [ref=e216]: Green — in range.
+          - text: Elbow estimate is within the selected range.
+      - alert [ref=e219]:
+        - paragraph [ref=e224]: "Moderate repeat agreement: some readings differ or a pass was rejected. The angle is an estimate."
+      - paragraph [ref=e229]: Green/red assesses this elbow estimate against your target; it does not grade the entire serve.
+      - generic [ref=e232]:
+        - button "Fullscreen" [ref=e237] [cursor=pointer]
+        - img "0" [ref=e243]
+      - group [ref=e246]:
+        - generic "keyboard_arrow_down How this number was measured" [active] [ref=e259] [cursor=pointer]:
+          - generic [ref=e248]:
+            - generic [ref=e260]: keyboard_arrow_down
+            - paragraph [ref=e253]: How this number was measured
+        - generic [ref=e263]:
+          - list [ref=e268]:
+            - listitem [ref=e269]:
+              - strong [ref=e270]: "Arm measured:"
+              - text: player's right arm (auto-detected)
+            - listitem [ref=e271]:
+              - strong [ref=e272]: "Angle source:"
+              - text: estimated MediaPipe 3D world landmarks (shoulder → elbow → wrist)
+            - listitem [ref=e273]:
+              - strong [ref=e274]: "Valid passes:"
+              - text: 4/5 (original, downscaled, mirrored, two small rotations) — the reported value is their median
+            - listitem [ref=e275]:
+              - strong [ref=e276]: "Observed readings:"
+              - text: 103.8°–104.4° (full spread 0.6°)
+            - listitem [ref=e277]:
+              - strong [ref=e278]: "Repeat agreement:"
+              - text: moderate; this is not an accuracy probability or confidence interval
+            - listitem [ref=e279]:
+              - strong [ref=e280]: "Stage check:"
+              - text: preparation cues verified on every accepted pass; manual arm selection also uses this check
+          - paragraph [ref=e285]: One extra pass located the small player before the five measurement passes.
+          - paragraph [ref=e290]: For comparison, the flat 2D image-plane angle is 74°. It differs whenever the arm points toward or away from the camera. Pixel aspect ratio is accounted for. Only estimated 3D landmarks decide the verdict.
+      - paragraph [ref=e258]: The target range is configurable demonstration logic, not a medically or professionally validated standard.

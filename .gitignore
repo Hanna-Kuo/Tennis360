@@ -1,0 +1,40 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials/
+secrets/
+private/
+
+# Sensitive business or legal material
+contracts/
+legal/
+quotations/
+
+# Local Python environment and generated artifacts
+.venv/
+.venv-backup*/
+.tennispose-setup.lock
+venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage/
+.DS_Store
+*.log
+
+# Local image inputs and non-public evaluation data
+uploads/
+data/private/
+models/
+archive/
+
+# IDE
+.idea/
+*.swp

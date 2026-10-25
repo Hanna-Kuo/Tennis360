@@ -1,0 +1,456 @@
+{
+  "label_scope": "Visual preparation appearance and arm only. Not coach correctness or measured3Dground truth. All numeric output snapshots are predictions.",
+  "evaluation_policy": "No random frame train/test splits. Taipei used for focus development; requires new independent validation.",
+  "cases": [
+    {
+      "file": "reference-photos/01_dominic_pagon.jpg",
+      "group": "legacy-reference-development",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/02_mcenroe_serve.jpg",
+      "group": "legacy-reference-development",
+      "preparation": true,
+      "arm": "left",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/03_jelena_ostapenko.jpg",
+      "group": "legacy-reference-development",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/04_carlos_alcaraz.jpg",
+      "group": "legacy-reference-development",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/05_gokberk_ergeneman.jpg",
+      "group": "legacy-reference-development",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/06_nicolas_mahut.jpg",
+      "group": "legacy-reference-development",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/07_tommy_haas.jpg",
+      "group": "legacy-reference-development",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/08_federer_trophy_pose.jpg",
+      "group": "legacy-reference-development",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/09_djokovic_trophy_pose.jpg",
+      "group": "legacy-reference-development",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "reference-photos/10_sharapova_serve.jpg",
+      "group": "legacy-reference-development",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection; reused development input",
+      "license_source": "docs/demo-assets/README.md"
+    },
+    {
+      "file": "teaching-photos/h01.jpg",
+      "group": "murray-correlated-event",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection recorded before first inference; phase/arm only",
+      "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+    },
+    {
+      "file": "teaching-photos/h02.jpg",
+      "group": "murray-correlated-event",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection recorded before first inference; phase/arm only",
+      "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+    },
+    {
+      "file": "teaching-photos/h03.jpg",
+      "group": "murray-correlated-event",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection recorded before first inference; phase/arm only",
+      "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+    },
+    {
+      "file": "teaching-photos/h04.jpg",
+      "group": "heldout-commons-h04.jpg",
+      "preparation": true,
+      "arm": "left",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection recorded before first inference; phase/arm only",
+      "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+    },
+    {
+      "file": "teaching-photos/h05.jpg",
+      "group": "heldout-commons-h05.jpg",
+      "preparation": false,
+      "arm": null,
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection recorded before first inference; phase/arm only",
+      "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+    },
+    {
+      "file": "teaching-photos/h06.jpg",
+      "group": "heldout-commons-h06.jpg",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection recorded before first inference; phase/arm only",
+      "license_source": "docs/demo-assets/teaching-photos/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_001.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_010.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_020.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_030.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_040.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_050.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_060.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_080.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_100.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_120.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_140.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_160.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": null,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_180.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_200.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_220.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": null,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_240.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_260.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_280.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_300.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_320.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": true,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_340.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_360.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_380.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_400.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_420.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_440.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_460.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_480.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    },
+    {
+      "file": "taipei/images/serve/S_500.jpeg",
+      "group": "taipei-serve-v1-single-source",
+      "preparation": false,
+      "arm": "right",
+      "coach_verdict": null,
+      "measured_angle_degrees": null,
+      "label_source": "Visual inspection of full frame and annotated person crop before inference; uncertain release/cocking frames remain null",
+      "license_source": "docs/demo-assets/taipei/manifest.json"
+    }
+  ]
+}
