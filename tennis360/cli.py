@@ -8,6 +8,8 @@ English-only, matching the mobile Live app.
 Usage examples::
 
     python -m tennis360.cli analyze serve1.mp4 serve2.mp4 --action serve
+    python -m tennis360.cli analyze practice.mp4 --action forehand --reps
+    python -m tennis360.cli analyze serves.mp4 --action serve --reps
     python -m tennis360.cli analyze forehand1.mp4 --action forehand --arm right
     python -m tennis360.cli analyze backhand1.mp4 --action backhand-two
     python -m tennis360.cli analyze slice1.mp4 --action backhand-slice
@@ -30,9 +32,15 @@ import argparse
 import sys
 from pathlib import Path
 
+from tennis360.capture_time import (
+    photo_capture_time,
+    to_utc_iso,
+    video_capture_time_from_path,
+)
 from tennis360.config import Targets, disclaimer, load_targets, write_example_config
 from tennis360.history import (
     AnalysisRecord,
+    effective_time,
     list_records,
     open_db,
     record,
@@ -46,13 +54,23 @@ from tennis360.pose_detector import (
 )
 from tennis360.reference import compare as compare_reference
 from tennis360.reference import load_reference, write_template
+from tennis360.repetitions import (
+    format_time_window,
+    invalid_rep_result,
+    serve_rep_invalid_reason,
+    serve_rep_record,
+    swing_rep_invalid_reason,
+    swing_rep_records,
+)
 from tennis360.reports import export_csv, export_excel, plot_trajectory, plot_trend
 from tennis360.strokes import SWING_ACTIONS
 from tennis360.video import (
     PHOTO_EXTENSIONS,
     VIDEO_EXTENSIONS,
     analyze_groundstroke,
+    analyze_groundstroke_reps,
     analyze_multi_angle,
+    analyze_serve_repetitions,
     analyze_video,
     blur_faces_video,
     extract_keyframes,
@@ -113,7 +131,15 @@ def cmd_analyze(args: argparse.Namespace) -> int:
         if suffix in PHOTO_EXTENSIONS:
             analyzed += _analyze_photo(db, path, args, demo_min, demo_max, source)
         elif suffix in VIDEO_EXTENSIONS:
-            if args.action in SWING_ACTIONS:
+            if args.reps and args.action == "serve":
+                analyzed += _analyze_serve_video_reps(
+                    db, path, args, demo_min, demo_max, source
+                )
+            elif args.reps and args.action in SWING_ACTIONS:
+                analyzed += _analyze_groundstroke_video_reps(
+                    db, path, args, demo_min, demo_max, source, targets
+                )
+            elif args.action in SWING_ACTIONS:
                 analyzed += _analyze_groundstroke_video(
                     db, path, args, demo_min, demo_max, source, targets
                 )
@@ -133,11 +159,26 @@ def _photo_arm(args) -> str:
     return args.arm
 
 
+def _photo_capture_iso(data: bytes) -> str | None:
+    """The photo's EXIF capture time as ISO UTC, when it carries one."""
+
+    moment = photo_capture_time(data)
+    return to_utc_iso(moment) if moment is not None else None
+
+
+def _video_capture_iso(path: Path) -> str | None:
+    """The video's embedded recording start as ISO UTC, when present."""
+
+    moment = video_capture_time_from_path(path)
+    return to_utc_iso(moment) if moment is not None else None
+
+
 def _analyze_photo(db, path: Path, args, demo_min, demo_max, source) -> int:
     from tennis360.image_input import decode_uploaded_image
 
     try:
-        image_rgb = decode_uploaded_image(path.read_bytes())
+        photo_bytes = path.read_bytes()
+        image_rgb = decode_uploaded_image(photo_bytes)
         _, report = analyze_rgb_image(
             image_rgb,
             _photo_arm(args),
@@ -165,6 +206,7 @@ def _analyze_photo(db, path: Path, args, demo_min, demo_max, source) -> int:
             spread_deg=report.spread_degrees,
             main_issue_en=issue,
             target_source=source,
+            captured_at=_photo_capture_iso(photo_bytes),
         ),
     )
     _print_report_line(path, report, message)
@@ -172,6 +214,7 @@ def _analyze_photo(db, path: Path, args, demo_min, demo_max, source) -> int:
 
 
 def _analyze_video_file(db, path: Path, args, demo_min, demo_max, source) -> int:
+    capture_iso = _video_capture_iso(path)
     try:
         analysis = analyze_video(path, arm=args.arm)
     except Exception as error:
@@ -189,6 +232,7 @@ def _analyze_video_file(db, path: Path, args, demo_min, demo_max, source) -> int
                 arm=args.arm,
                 main_issue_en="No Trophy Segment Found",
                 target_source=source,
+                captured_at=capture_iso,
             ),
         )
         return 1
@@ -212,6 +256,7 @@ def _analyze_video_file(db, path: Path, args, demo_min, demo_max, source) -> int
             in_range=in_range,
             main_issue_en=issue,
             target_source=source,
+            captured_at=capture_iso,
         ),
     )
     angle_text = f"{frame.angle_3d:.0f}°" if frame.angle_3d else "n/a"
@@ -226,6 +271,7 @@ def _analyze_video_file(db, path: Path, args, demo_min, demo_max, source) -> int
 def _analyze_groundstroke_video(
     db, path: Path, args, demo_min, demo_max, source, targets
 ) -> int:
+    capture_iso = _video_capture_iso(path)
     try:
         targets_obj = targets if targets is not None else load_targets(args.config)
     except (FileNotFoundError, ValueError, ImportError):
@@ -250,6 +296,7 @@ def _analyze_groundstroke_video(
                 arm=args.arm,
                 main_issue_en="; ".join(analysis.suggestions) or "No Clear Swing Found",
                 target_source=source,
+                captured_at=capture_iso,
             ),
         )
         return 1
@@ -271,6 +318,7 @@ def _analyze_groundstroke_video(
             in_range=metrics.contact_elbow_in_range,
             main_issue_en=issue,
             target_source=source,
+            captured_at=capture_iso,
         ),
     )
 
@@ -286,6 +334,133 @@ def _analyze_groundstroke_video(
     for suggestion in analysis.suggestions:
         print(f"  - {suggestion}")
     return 1
+
+
+def _analyze_groundstroke_video_reps(
+    db, path: Path, args, demo_min, demo_max, source, targets
+) -> int:
+    """Analyze every repetition of the stroke in one practice video.
+
+    Each successfully analyzed repetition is stored as its own history
+    record (tagged with its repetition number and contact time);
+    repetitions that cannot be analyzed are reported but not stored.
+    Returns the number of records stored.
+    """
+
+    try:
+        targets_obj = targets if targets is not None else load_targets(args.config)
+    except (FileNotFoundError, ValueError, ImportError):
+        targets_obj = None
+    try:
+        result = analyze_groundstroke_reps(
+            path, action=args.action, arm=args.arm, targets=targets_obj
+        )
+    except Exception as error:
+        print(f"Failed: {path} ({error})")
+        return 0
+
+    if not result.rep_results:
+        print(f"No Strokes Detected: {path}")
+        return 0
+
+    entries = swing_rep_records(
+        result.rep_results,
+        source_file=str(path),
+        action=args.action,
+        arm=result.arm or args.arm,
+        target_source=source,
+        capture_start=_video_capture_iso(path),
+    )
+    for entry in entries:
+        record(db, entry)
+
+    print(f"[{args.action}] {path.name}: Strokes Detected: {len(result.rep_results)}")
+    for rep in result.rep_results:
+        if rep.analyzed and rep.metrics is not None:
+            angle = rep.metrics.contact_elbow_deg
+            angle_text = f"{angle:.0f}°" if angle is not None else "n/a"
+            print(
+                f"  Stroke {rep.rep_index}: "
+                f"{format_time_window(rep.window_start_s, rep.window_end_s)}, "
+                f"Contact {rep.contact_time_s:.2f} s "
+                f"(Estimated Key Moment), Elbow {angle_text}"
+            )
+            for suggestion in rep.suggestions:
+                print(f"    - {suggestion}")
+        else:
+            print(
+                f"  Stroke {rep.rep_index}: "
+                f"{format_time_window(rep.window_start_s, rep.window_end_s)} "
+                f"— {invalid_rep_result(swing_rep_invalid_reason(rep))}"
+            )
+    print(f"Stored {len(entries)} stroke records in local history.")
+    print(
+        "Invalid and skipped (not recorded): "
+        f"{len(result.rep_results) - len(entries)}."
+    )
+    return len(entries)
+
+
+def _analyze_serve_video_reps(
+    db, path: Path, args, demo_min, demo_max, source
+) -> int:
+    """Analyze every serve in one practice video, one measurement each.
+
+    Each serve is scored from the video scan's trophy-frame measurement
+    (the same machinery as the single video analysis); only repetitions
+    that were actually measured are stored, each as its own history
+    record tagged with its repetition number and trophy time.
+    Returns the number of records stored.
+    """
+
+    try:
+        reps = analyze_serve_repetitions(
+            path, arm=args.arm, demo_minimum=demo_min, demo_maximum=demo_max
+        )
+    except Exception as error:
+        print(f"Failed: {path} ({error})")
+        return 0
+
+    if not reps:
+        print(f"No Strokes Detected: {path}")
+        return 0
+
+    capture_iso = _video_capture_iso(path)
+    stored = 0
+    print(f"[serve] {path.name}: Strokes Detected: {len(reps)}")
+    for rep in reps:
+        entry = serve_rep_record(
+            rep_index=rep.rep_index,
+            trophy_time_s=rep.trophy_time_s,
+            source_file=str(path),
+            angle_degrees=rep.angle_degrees,
+            in_range=rep.in_range,
+            arm=rep.arm,
+            requested_arm=args.arm,
+            target_source=source,
+            capture_start=capture_iso,
+        )
+        if entry is None:
+            print(
+                f"  Stroke {rep.rep_index}: "
+                f"{format_time_window(rep.segment_start_s, rep.segment_end_s)}, "
+                f"Trophy Frame {rep.trophy_time_s:.2f} s "
+                f"— {invalid_rep_result(serve_rep_invalid_reason(rep.error))}"
+            )
+            continue
+        record(db, entry)
+        stored += 1
+        verdict = "OK" if entry.in_range else "CHECK"
+        print(
+            f"[{verdict}] Stroke {rep.rep_index}: "
+            f"{format_time_window(rep.segment_start_s, rep.segment_end_s)}, "
+            f"Trophy Frame {rep.trophy_time_s:.2f} s, "
+            f"Elbow {rep.angle_degrees:.0f}° "
+            f"({entry.main_issue_en})"
+        )
+    print(f"Stored {stored} stroke records in local history.")
+    print(f"Invalid and skipped (not recorded): {len(reps) - stored}.")
+    return stored
 
 
 def _print_report_line(path: Path, report, message: str) -> None:
@@ -305,9 +480,18 @@ def cmd_history(args: argparse.Namespace) -> int:
     for row in rows:
         angle = f"{row['angle_deg']:.0f}°" if row["angle_deg"] is not None else "n/a"
         mark = {1: "OK", 0: "CHECK"}.get(row["in_range"], "WARN")
+        rep = ""
+        if "rep_index" in row.keys() and row["rep_index"] is not None:
+            rep = f"  Stroke {row['rep_index']}"
+            if row["video_time_s"] is not None:
+                rep += f" @ {row['video_time_s']:.2f} s"
+        stamp = effective_time(
+            row["recorded_at"],
+            row["captured_at"] if "captured_at" in row.keys() else None,
+        )
         print(
-            f"{row['recorded_at']}  {mark} {row['action']} {angle}  "
-            f"{row['source_file']}  {row['main_issue_en']}"
+            f"{stamp}  {mark} {row['action']} {angle}  "
+            f"{row['source_file']}{rep}  {row['main_issue_en']}"
         )
     return 0
 
@@ -409,6 +593,7 @@ def cmd_multi_angle(args: argparse.Namespace) -> int:
                 arm=frame.arm or args.arm,
                 angle_deg=round(frame.angle_3d, 1) if frame.angle_3d else None,
                 main_issue_en="Multi-Angle Fused Analysis",
+                captured_at=_video_capture_iso(Path(args.side)),
             ),
         )
         print("Stored in local history.")
@@ -477,6 +662,14 @@ def build_parser() -> argparse.ArgumentParser:
     analyze.add_argument("--action", default="serve", choices=ACTION_CHOICES)
     analyze.add_argument("--arm", default="auto", choices=["auto", "left", "right"])
     analyze.add_argument("--angle", default="", help="Camera angle tag (side/front)")
+    analyze.add_argument(
+        "--reps",
+        action="store_true",
+        help=(
+            "Practice videos: analyze every stroke in the video and "
+            "store one history record per stroke"
+        ),
+    )
     analyze.set_defaults(func=cmd_analyze)
 
     history = sub.add_parser("history", parents=[common], help="List local history")

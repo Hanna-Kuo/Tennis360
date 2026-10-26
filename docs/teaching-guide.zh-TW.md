@@ -1,159 +1,159 @@
-# TennisPose 明日課堂教師教案（120 分鐘）
+# TennisPose Teacher's Lesson Plan for Tomorrow's Class (120 Minutes)
 
-本教案給第一次帶學生讀 AI/Python 小專題的老師使用。目標不是把學生訓練成姿勢辨識工程師，而是讓他們能說清楚：一張授權的發球 Trophy Pose 照片如何在**本機**得到一個可檢查的結果，以及系統為什麼有時應該拒絕回答。
+This lesson plan is for a teacher guiding students through an AI/Python mini-project for the first time. The goal is not to train students into pose-recognition engineers, but to let them explain clearly: how one authorized serve Trophy Pose photo obtains a checkable result **locally**, and why the system should sometimes refuse to answer.
 
-TennisPose 只檢查持拍手肘的肩膀—手肘—手腕夾角。綠色、紅色與 80–120 度是可調的展示規則，不是教練、醫療、受傷預防或完整發球評估。課中使用 `docs/demo-assets/` 內 45 張已授權且附署名的照片；另有兩段光學動作捕捉資料供延伸練習。不要把學生或私人照片放入 Git、教材或公開服務。
+TennisPose only checks the shoulder–elbow–wrist angle of the racket arm. Green, red, and the 80–120 degree range are adjustable demonstration rules, not coaching, medical, injury-prevention, or complete serve evaluations. The class uses the 45 authorized, attribution-carrying photos in `docs/demo-assets/`; two optical motion-capture datasets are also available for extension exercises. Do not put student or private photos into Git, teaching materials, or public services.
 
-## 課前準備（請提前完成安裝，不要只留 10 分鐘）
+## Before-Class Preparation (Complete the Installation in Advance — Do Not Leave Only 10 Minutes)
 
-請在上課前於每台示範電腦完成以下事項；教室電腦可兩到三人共用一台。
+Please complete the following on every demonstration computer before class; classroom computers can be shared by two to three students each.
 
-1. 確認已安裝 **64 位元 Python 3.11**。啟動器不會自行安裝 Python；沒有它時，先請學校依正常軟體安裝流程處理。
-2. 專案根目錄已有 `start.command`（macOS）與 `start.bat`（Windows）時，分別以雙擊方式啟動對應檔案。它們共用 `scripts/bootstrap.py`，會建立 `.venv`、安裝 `requirements.txt`、下載並檢查官方 MediaPipe 模型，然後只在 `127.0.0.1` 啟動 Streamlit。
-3. 第一次啟動必須能連網，因為需要下載 Python 套件與官方模型；完成後，照片分析不需要 API key，應用程式碼沒有照片上傳服務。這不是發布或公開網站，瀏覽器只連到本機。
-4. 確認瀏覽器開出本機頁面，先不選照片時會看到上傳提示。準備好 `docs/demo-assets/reference-photos/` 中的照片與 `docs/demo-assets/README.md` 的授權資訊。
+1. Confirm that **64-bit Python 3.11** is installed. The launcher does not install Python by itself; if it is missing, have the school handle it through the normal software installation process first.
+2. When the project root already has `start.command` (macOS) and `start.bat` (Windows), start the matching file by double-clicking. They share `scripts/bootstrap.py`, which creates `.venv`, installs `requirements.txt`, downloads and checks the official MediaPipe model, and then starts Streamlit bound only to `127.0.0.1`.
+3. The first launch must be able to reach the network, because it needs to download Python packages and the official model; afterwards, photo analysis needs no API key, and the application code has no photo upload service. This is not a published or public website; the browser only connects to the local machine.
+4. Confirm the browser opens the local page and shows the upload prompt before any photo is selected. Have the photos in `docs/demo-assets/reference-photos/` and the licensing information in `docs/demo-assets/README.md` ready.
 
-不要把 Windows 說成「已在所有電腦實測」：本教案只說明 `start.bat` 的啟動流程。上課前應在實際教室 Windows 電腦跑一次，並記下結果。
+Do not describe Windows as "tested on all computers": this plan only documents the `start.bat` launch flow. Before class, run it once on the actual classroom Windows computer and note the result.
 
-## 老師可直接照講的 120 分鐘流程
+## The 120-Minute Flow (The Teacher Can Read It Aloud As-Is)
 
-| 時間 | 帶領方式與可直接說的話 | 學生產出 |
+| Time | Guidance and ready-to-say lines | Student output |
 |---|---|---|
-| 0–10 分 | 「今天不是要判斷誰的發球好，而是看電腦如何對一張照片做有限、可說明的判斷。」展示沒有上傳照片的頁面，指出只接受 JPEG/PNG、一次一張。 | 能說出輸入是一張授權照片，輸出有綠、紅、無法分析三種。 |
-| 10–25 分 | 用一張綠色範例和一張紅色範例操作。先讓學生猜測差別，再開啟 *How this number was measured*。 | 能指出持拍手、角度、範圍與複測一致程度。 |
-| 25–40 分 | 白話解釋模型與資料邊界（見下一節），接著上傳一張無法分析照片，強調拒絕比亂給分數可靠。 | 能說明「無法分析」不是零分也不是故障。 |
-| 40–55 分 | 畫肩膀 S、手肘 E、手腕 W；讓學生以兩根手臂向量在手肘相交的比喻理解角度。 | 能說出角度是 `S−E` 與 `W−E` 的夾角。 |
-| 55–70 分 | 介紹 2D 與 3D，讓學生比較介面中的 2D 對照值與判定值。 | 能說出綠/紅只看 3D world landmarks，不看平面 2D 值。 |
-| 70–90 分 | 依「建議閱讀順序」分組導讀程式。老師只投影關鍵函式，不必逐行解釋 Python。 | 每組完成一題低風險小練習。 |
-| 90–105 分 | 小組依十張授權範例分類，對照結果截圖與 manifest。 | 完成 green/red/cannot 分組並說出限制。 |
-| 105–115 分 | 進行學生驗收：每組操作一個成功案例與一個拒絕案例。 | 用證據解釋結果，非只報顏色。 |
-| 115–120 分 | 收尾：「模型是量測工具，不是裁判；不知道時說不知道，是設計的一部分。」 | 交出簡短口頭或書面反思。 |
+| 0–10 min | "Today we are not judging whose serve is good; we are looking at how a computer makes a limited, explainable judgment about one photo." Show the page with no photo uploaded; point out that it accepts only JPEG/PNG, one photo at a time. | Can state that the input is one authorized photo, and the output has three kinds: green, red, and cannot analyze. |
+| 10–25 min | Demonstrate with one green example and one red example. Let students guess the difference first, then open *How this number was measured*. | Can point out the racket arm, angle, range, and repeat-agreement level. |
+| 25–40 min | Explain the model and data boundaries in plain language (next section), then upload a cannot-analyze photo and stress that refusing is more reliable than inventing a score. | Can explain that "cannot analyze" is neither a zero score nor a malfunction. |
+| 40–55 min | Draw shoulder S, elbow E, wrist W; let students understand the angle through the metaphor of two arm vectors meeting at the elbow. | Can state that the angle is the angle between `S−E` and `W−E`. |
+| 55–70 min | Introduce 2D vs 3D, and let students compare the 2D reference value in the interface with the verdict value. | Can state that green/red looks only at the 3D world landmarks, not the flat 2D value. |
+| 70–90 min | Guide group reading of the code following the "Suggested Reading Order". The teacher projects only the key functions and does not need to explain Python line by line. | Each group completes one low-risk mini exercise. |
+| 90–105 min | Groups classify the ten authorized examples and compare them with the result screenshots and the manifest. | Complete the green/red/cannot grouping and state the limitations. |
+| 105–115 min | Student acceptance: each group demonstrates one success case and one refusal case. | Explain results with evidence, not just by reporting the color. |
+| 115–120 min | Closing: "The model is a measurement tool, not a referee; saying 'I don't know' when it doesn't know is part of the design." | Hand in a short spoken or written reflection. |
 
-## 五個白話概念
+## Five Plain-Language Concepts
 
-**模型（MediaPipe PoseLandmarker）**：可把它想成「在照片上先找人體關節的大致位置」的本機工具。它不是看懂網球技術的教練，也不能保證每張圖都找對；衣服、遮擋、光線、角度和人物太小都會影響它。
+**Model (MediaPipe PoseLandmarker)**: Think of it as a local tool that "first finds the approximate positions of body joints in a photo". It is not a coach that understands tennis technique, and it cannot guarantee it finds the right points in every image; clothing, occlusion, lighting, angle, and a too-small person all affect it.
 
-**Python**：這個專題用的程式語言。可以把它想成把規則寫成可重複執行的步驟：讀圖、檢查、請模型找點、算角度、顯示結果。
+**Python**: The programming language used in this project. Think of it as writing rules as repeatable steps: read the image, check it, ask the model to find points, compute the angle, display the result.
 
-**`.venv`**：專題自己的小工具箱。套件裝在這裡，避免和電腦其他 Python 專題互相干擾；它是本機暫存的環境，不應放進 Git。
+**`.venv`**: The project's own little toolbox. Packages are installed here so they do not interfere with other Python projects on the computer; it is a local, temporary environment and should not go into Git.
 
-**Streamlit**：把 Python 程式做成眼前這個本機網頁介面的工具。瀏覽器只是操作面板，運算仍在同一台電腦的 Python 程式中完成。
+**Streamlit**: The tool that turns the Python program into the local web interface in front of you. The browser is only the control panel; the computation still happens in the Python program on the same computer.
 
-**3D 估計與規則拒絕**：平面照片只看得到左右與上下；手臂若朝鏡頭伸出，平面角度會被壓扁。程式使用模型估計的 3D `pose_world_landmarks` 來判定，2D 值只作對照。即使是 3D 估計也可能不可靠，所以關節看不清、未通過姿勢篩選、持拍手不明，或五次複測的有效讀值少於三次、跨過判定邊界或分歧太大時，程式會顯示 cannot analyze，而不編造角度。
+**3D estimation and rule-based refusal**: A flat photo only shows left/right and up/down; if an arm reaches toward the camera, the flat angle gets compressed. The program judges using the model's estimated 3D `pose_world_landmarks`, and the 2D value is only a reference. Even the 3D estimate can be unreliable, so when the joints are not clearly visible, the pose screen is not passed, the racket arm is unclear, or fewer than three of the five repeat readings are valid, the readings cross the verdict boundary, or they disagree too much, the program shows cannot analyze instead of fabricating an angle.
 
-## 建議閱讀順序（每份只抓一個問題）
+## Suggested Reading Order (One Question per File)
 
-1. `README.md`：產品只做什麼、不做什麼，以及本機運作邊界。
-2. `streamlit_app.py`：學生按上傳、選擇手臂、看到綠紅或 cannot analyze 的位置。
-3. ```tennis360/image_input.py`：為何只收 JPEG/PNG、上限 10 MB、20 百萬像素，且不把上傳圖片寫入磁碟。
-4. ```tennis360/pose_math.py`：從 `calculate_elbow_angle_3d` 看向量角度；從 `pool_angles` 看五次複測中至少三次有效讀值的中位數、完整差距與一致程度；從 `DEFAULT_TROPHY_MINIMUM/MAXIMUM` 看展示範圍。
-5. ```tennis360/pose_detector.py`：模型讀取、手臂自動選擇與 `cannot_analyze` 原因碼如何串起來。只讀 `_select_arm`、`_collect_angles` 與 `_cannot_analyze` 附近即可。
-6. `docs/architecture.md`：把前面各檔案放回完整資料流，特別看 Result States 與 reason codes。
-7. `tests/test_pose_math.py`、`tests/test_arm_selection.py`：程式如何用固定輸入確認「邊界剛好 80/120 度」「不是 Trophy Pose 時拒絕」等規則。
-8. `docs/demo-assets/README.md`：45 張照片與兩段動作捕捉資料的來源、作者、授權及結果；展示素材時必讀。
+1. `README.md`: What the product does and does not do, and the local-operation boundary.
+2. `streamlit_app.py`: Where students see the upload, arm selection, and green/red or cannot analyze.
+3. ```tennis360/image_input.py`: Why only JPEG/PNG is accepted, the 10 MB and 20 megapixel limits, and why uploaded images are never written to disk.
+4. ```tennis360/pose_math.py`: See the vector angle from `calculate_elbow_angle_3d`; see the median of at least three valid readings out of five repeats, the full spread, and the agreement level from `pool_angles`; see the demonstration range from `DEFAULT_TROPHY_MINIMUM/MAXIMUM`.
+5. ```tennis360/pose_detector.py`: How model loading, automatic arm selection, and `cannot_analyze` reason codes connect. Only read around `_select_arm`, `_collect_angles`, and `_cannot_analyze`.
+6. `docs/architecture.md`: Put the earlier files back into the complete data flow, especially Result States and reason codes.
+7. `tests/test_pose_math.py`, `tests/test_arm_selection.py`: How the program uses fixed inputs to confirm rules like "exactly 80/120 degrees on the boundary" and "refuse when it is not a Trophy Pose".
+8. `docs/demo-assets/README.md`: The sources, authors, licenses, and results of the 45 photos and two motion-capture datasets; required reading when showing the assets.
 
-## 安全、低風險小練習（含答案）
+## Safe, Low-Risk Mini Exercises (with Answers)
 
-前三種學習方式是讀檔案、操作本機介面與口算；另附一個簡單程式修改練習。不要新增學生照片或上傳到任何外部網站。
+The first three learning modes are reading files, operating the local interface, and mental arithmetic; an additional simple code-modification exercise is included. Do not add student photos or upload anything to any external website.
 
-### 練習 1：找出「不亂猜」的證據（8 分鐘）
+### Exercise 1: Find the Evidence for "Not Guessing" (8 Minutes)
 
-問題：在 `docs/architecture.md` 找出任兩個 cannot-analyze 原因碼，並用自己的話說明為什麼此時不應有分數。
+Question: In `docs/architecture.md`, find any two cannot-analyze reason codes and explain in your own words why there should be no score at that point.
 
-參考答案：`ambiguous_arm` 表示其中一隻手被遮住，程式無法知道哪一隻才拿球拍；`unstable` 表示有效讀值不足三次或完整差距超過 20°，不能支持判定。另可答 `no_pose`、`no_reliable_arm`、`not_trophy_pose` 或 `invalid_geometry`。共同原則是「資料不足時輸出原因，不輸出假數字」。
+Reference answer: `ambiguous_arm` means one hand is occluded, so the program cannot know which hand holds the racket; `unstable` means fewer than three valid readings or a full spread over 20°, which cannot support a verdict. `no_pose`, `no_reliable_arm`, `not_trophy_pose`, or `invalid_geometry` are also acceptable. The shared principle is "when the data is insufficient, output a reason, not a fake number".
 
-### 練習 2：手算一個容易的角度（8 分鐘）
+### Exercise 2: Hand-Compute an Easy Angle (8 Minutes)
 
-假設以手肘 E 為原點，肩膀方向 `S−E = (0, 1, 0)`，手腕方向 `W−E = (1, 0, 0)`。夾角是多少？程式在哪個函式做這件事？
+Suppose, with the elbow E as origin, the shoulder direction is `S−E = (0, 1, 0)` and the wrist direction is `W−E = (1, 0, 0)`. What is the angle? Which function in the program does this?
 
-參考答案：90 度，因為兩向量垂直，內積為 0。對應函式是 ```tennis360/pose_math.py` 的 `calculate_elbow_angle_3d`，它最後交給 `_angle_between` 計算。真實照片不是這麼整齊，因此結果只是估計，也要通過可見度與穩定性檢查。
+Reference answer: 90 degrees, because the two vectors are perpendicular and their dot product is 0. The corresponding function is `calculate_elbow_angle_3d` in ```tennis360/pose_math.py`, which passes the final computation to `_angle_between`. Real photos are not this tidy, so the result is only an estimate and must also pass the visibility and stability checks.
 
-### 練習 3：改變展示範圍，觀察顏色（8 分鐘）
+### Exercise 3: Change the Demonstration Range and Watch the Color (8 Minutes)
 
-選一張已成功分析的範例，先將側欄範圍調成 80–120，再調成 110–120（例如使用約 99 度的 McEnroe 或 104 度的臺北 S_030），觀察顏色是否改變。請勿把這個結果解釋成技術好壞。
+Pick one successfully analyzed example. First set the sidebar range to 80–120, then change it to 110–120 (for example using the roughly 99-degree McEnroe photo or the roughly 104-degree Taipei S_030), and observe whether the color changes. Do not interpret the result as good or bad technique.
 
-參考答案：範圍是「含端點」的展示規則：量到的角度等於最小值或最大值時是 green，落在外面時是 red。畫面角度會四捨五入，不能用顯示的整數驗證剛好等於端點；精確的 80/120 邊界由 `tests/test_pose_math.py` 測試。這個操作只改目前設定，並沒有改照片。
+Reference answer: The range is an "endpoints inclusive" demonstration rule: when the measured angle equals the minimum or maximum it is green, and outside it is red. The on-screen angle is rounded, so the displayed integer cannot verify an exact endpoint match; the exact 80/120 boundaries are tested by `tests/test_pose_math.py`. This operation only changes the current setting; it does not change the photo.
 
-### 練習 4：2D 不能取代 3D（8 分鐘）
+### Exercise 4: 2D Cannot Replace 3D (8 Minutes)
 
-開啟任一已分析結果的細節。若 2D 對照角度與顯示的肘角不同，哪一個決定綠/紅？為什麼？
+Open the details of any analyzed result. If the 2D reference angle differs from the displayed elbow angle, which one decides green/red? Why?
 
-參考答案：3D `pose_world_landmarks` 的角度決定綠/紅；手臂朝向或背向相機時，平面投影會縮短深度方向，2D 可能明顯低估真實夾角。這不代表 3D 已達專業生物力學精度，只代表它比用平面投影作判定更符合本專題的設計。
+Reference answer: The angle from the 3D `pose_world_landmarks` decides green/red; when the arm points toward or away from the camera, the flat projection shortens the depth direction and 2D can clearly underestimate the real angle. That does not mean the 3D estimate has reached professional biomechanics accuracy — only that it fits this project's design better than judging from a flat projection.
 
-## 十張已授權示例：課堂篩選與局限
+## Ten Authorized Examples: Classroom Screening and Limits
 
-以下是目前 repository 內的已記錄本機結果，供老師分組發給學生。照片、截圖與完整作者／授權都在 `docs/demo-assets/README.md`；對外展示時必須保留該 manifest 的來源、署名與 Creative Commons 條件。
+The following are the recorded local results currently in the repository, for the teacher to hand out to groups. The photos, screenshots, and complete author/license information are all in `docs/demo-assets/README.md`; when showing them externally, the manifest's sources, attribution, and Creative Commons terms must be retained.
 
-| 結果 | 檔案 | 已記錄的理由或角度 |
+| Result | File | Recorded reason or angle |
 |---|---|---|
-| Cannot analyze | 01 Dominic Pagon | Ready stance，非 Trophy Pose，不給分數。 |
-| Green | 02 John McEnroe | 左臂，99.2°，固定聚焦裁切。 |
-| Cannot analyze | 03 Jelena Ostapenko | 持拍手被遮住，手臂不明。 |
-| Cannot analyze | 04 Carlos Alcaraz | 3D 複測衝突，拒絕判定。 |
-| Cannot analyze | 05 Gökberk Ergeneman | 隨揮階段，拒絕判定。 |
-| Cannot analyze | 06 Nicolas Mahut | 擊球階段，拒絕判定。 |
-| Cannot analyze | 07 Tommy Haas | 手臂不可靠／持拍手不明。 |
-| Green | 08 Roger Federer | 右臂，85.3°。 |
-| Green | 09 Novak Djokovic | 右臂，111.1°，固定聚焦裁切。 |
-| Cannot analyze | 10 Maria Sharapova | 擊球階段，拒絕判定。 |
+| Cannot analyze | 01 Dominic Pagon | Ready stance, not a Trophy Pose, no score given. |
+| Green | 02 John McEnroe | Left arm, 99.2°, fixed focus crop. |
+| Cannot analyze | 03 Jelena Ostapenko | Racket arm occluded, arm unclear. |
+| Cannot analyze | 04 Carlos Alcaraz | 3D repeat readings conflict, verdict refused. |
+| Cannot analyze | 05 Gökberk Ergeneman | Follow-through phase, verdict refused. |
+| Cannot analyze | 06 Nicolas Mahut | Contact phase, verdict refused. |
+| Cannot analyze | 07 Tommy Haas | Arm unreliable / racket arm unclear. |
+| Green | 08 Roger Federer | Right arm, 85.3°. |
+| Green | 09 Novak Djokovic | Right arm, 111.1°, fixed focus crop. |
+| Cannot analyze | 10 Maria Sharapova | Contact phase, verdict refused. |
 
-2026-10-11 更新：05、06、10 是隨揮或擊球時刻，新版會拒測；手動選臂或調寬範圍也不能略過此檢查。舊結果截圖屬歷史版本。紅色流程可用 McEnroe 照片設定 110–120° 示範，須說明這是設定示範，並非已驗證的錯誤技術。
+2026-10-11 update: 05, 06, and 10 are follow-through or contact moments, and the new version refuses to measure them; manually selecting an arm or widening the range cannot bypass this check. The old result screenshots belong to a historical version. The red flow can be demonstrated with the McEnroe photo set to 110–120°, with the explanation that this is a settings demonstration, not verified faulty technique.
 
-這十張不是「十種所有情況」或模型準確率證明。它們是有來源的回歸示例，仍受單張照片時刻、鏡頭角度、裁切、遮擋、人物大小、服裝、光線與模型估計限制。特別提醒學生：紅色只表示本次 3D 估計落在目前設定的展示範圍外；綠色不等於動作正確、健康或安全；cannot analyze 也不表示選手動作不好。
+These ten photos are not "all ten kinds of situations" or proof of model accuracy. They are sourced regression examples, still limited by the single-photo moment, camera angle, crop, occlusion, person size, clothing, lighting, and model estimation. Remind students in particular: red only means this 3D estimate fell outside the currently set demonstration range; green does not mean the movement is correct, healthy, or safe; and cannot analyze does not mean the player moves badly.
 
-## 新增實拍與動作捕捉練習
+## New Real Photos and Motion-Capture Exercises
 
-`docs/demo-assets/teaching-photos/` 保存六張補充照片，可比較左手發球、遮擋、擊球與隨揮。`taipei/` 保存 29 張真實照片與人工 2D 標註；可先用聯絡表判斷階段，再上傳 S_030、S_120、S_200、S_300。新版會依人物大小做固定裁切，畫面明示裁切；不是依綠色結果挑最有利角度。這批八張目視準備姿勢可分析數由 0 增加到 4，19 張其他階段都拒測；這是開發樣本的可用率，不能叫正誤準確率。
+`docs/demo-assets/teaching-photos/` holds six supplementary photos for comparing left-handed serves, occlusion, contact, and follow-through. `taipei/` holds 29 real photos with manual 2D annotations; first use the contact sheet to judge the phase, then upload S_030, S_120, S_200, S_300. The new version applies a fixed crop based on person size and shows the crop on screen; it does not pick the angle most favorable to a green result. Out of this batch, the eight visually preparation-pose photos went from 0 analyzable to 4, and the other 19 phases are all refused; that is the usability rate of a development sample and must not be called an accuracy rate.
 
-延伸題：為什麼人工 2D 點、模型估計 3D、光學實測資料與教練正誤標註不能互換？參考答案：2D 沒有深度；模型 3D 仍可能估錯；光學動作捕捉可驗證幾何但這兩段沒有對應照片與 Trophy 時刻；教練標註才回答技術正誤。目前的 HP/RP 是參與者能力分類，不是每幀正誤。
+Extension question: Why can't manual 2D points, model-estimated 3D, optical ground-truth data, and coach correctness labels be interchanged? Reference answer: 2D has no depth; model 3D can still be estimated wrong; optical motion capture can verify geometry but these two clips have no corresponding photos or Trophy moments; and only coach labels answer technical correctness. The current HP/RP are participant ability categories, not per-frame correctness labels.
 
-老師可使用下列指令，另開輸出資料夾保存學生練習報告：
+The teacher can use the following commands, with a separate output folder for student exercise reports:
 
 ```bash
 .venv/bin/python scripts/evaluate_photos.py --output archive/class-photos --save-overlays
 .venv/bin/python scripts/evaluate_mocap.py --report-dir archive/class-mocap
 ```
 
-動作捕捉工具會比較兩種獨立角度公式；已記錄 12,000 次有效讀值的最大差異約 1.85e-12°。這證明數學實作一致，不能當作照片角度誤差。報告中的教練正誤與照片實測 3D 誤差都保留 `null`。`class-mocap` 必須是新的資料夾，避免覆寫報告。顯示或分發照片、裁切結果與角度表時，要一併保留各資料集的作者、來源及 CC 授權；動作捕捉衍生資料使用 CC BY-SA 3.0。
+The motion-capture tool compares two independent angle formulas; the maximum difference over the recorded 12,000 valid readings is about 1.85e-12°. That proves the math implementations agree; it cannot serve as photo angle error. The coach correctness labels and photo-measured 3D errors in the reports are kept as `null`. `class-mocap` must be a new folder to avoid overwriting reports. When showing or distributing photos, crops, and angle tables, keep each dataset's author, source, and CC license with them; motion-capture derivative data uses CC BY-SA 3.0.
 
-## 常見故障與現場處理
+## Common Failures and On-Site Handling
 
-| 現象 | 先做什麼 | 不要做什麼 |
+| Symptom | Do this first | Do not do this |
 |---|---|---|
-| 啟動器說找不到 Python 或無法建立環境 | 確認 64 位元 Python 3.11 已安裝；關閉後重跑啟動器。 | 不要讓學生下載不明 Python 安裝檔或手動複製 `.venv`。 |
-| 第一次安裝下載失敗 | 檢查教室網路、代理或防火牆後重跑；模型與套件下載完成後再進行練習。 | 不要把模型檔或網路帳密提交到 repository。 |
-| 瀏覽器沒有自動開啟 | 讀取終端顯示的本機網址，再在同一台電腦瀏覽器開啟；確認是 `127.0.0.1`。 | 不要設定公開 IP、通道或分享連結。 |
-| 顯示「模型未安裝」 | 用啟動器重新跑完模型下載與檢查步驟，再重啟應用程式。 | 不要從不明網站下載同名 `.task` 檔。 |
-| 上傳後 cannot analyze | 改用清楚、單一人物、兩手較可見、接近 Trophy Pose 的已授權照片；閱讀顯示的原因。 | 不要把 cannot analyze 當作程式必須硬修成分數的錯誤。 |
-| 綠/紅看起來不符合直覺 | 展開量測細節，確認選到的手、3D 角度、範圍與 Repeat agreement；必要時使用明示左右手作對照。 | 不要宣稱它已證明姿勢技術、受傷風險或醫療結論。 |
-| 檔案被拒絕 | 使用可讀的 JPEG/PNG，且小於 10 MB、低於 20 百萬像素。 | 不要把轉檔後的私人照片加入 `docs/demo-assets/`。 |
+| The launcher says Python cannot be found or the environment cannot be created | Confirm 64-bit Python 3.11 is installed; close and rerun the launcher. | Do not let students download Python installers from unknown sources or manually copy `.venv`. |
+| The first installation download fails | Check the classroom network, proxy, or firewall, then rerun; finish the exercises after the model and package downloads complete. | Do not commit model files or network credentials to the repository. |
+| The browser does not open automatically | Read the local URL shown in the terminal and open it in a browser on the same computer; confirm it is `127.0.0.1`. | Do not set up a public IP, tunnel, or sharing link. |
+| "Model not installed" is displayed | Rerun the launcher through the model download and check steps, then restart the app. | Do not download a same-named `.task` file from an unknown website. |
+| Cannot analyze after upload | Switch to a clear, single-person, both-arms-visible authorized photo close to a Trophy Pose; read the displayed reason. | Do not treat cannot analyze as a bug the program must force into a score. |
+| Green/red looks counterintuitive | Expand the measurement details and confirm the selected arm, 3D angle, range, and repeat agreement; use an explicit left/right arm for comparison if needed. | Do not claim it proves pose technique, injury risk, or a medical conclusion. |
+| A file is rejected | Use a readable JPEG/PNG under 10 MB and under 20 megapixels. | Do not add converted private photos into `docs/demo-assets/`. |
 
-## 學生驗收（最後 10 分鐘）
+## Student Acceptance (Final 10 Minutes)
 
-每組向老師展示或口頭回答下列五項即可通過：
+Each group passes by showing the teacher, or answering orally, the following five items:
 
-1. 成功啟動本機頁面，並說明它只綁定本機 `127.0.0.1`，沒有 API key、帳號或公開發布。
-2. 用一張已授權示例得到 green 或 red，指出量的是哪一隻手臂、顯示角度與目前展示範圍。
-3. 用另一張已授權示例得到 cannot analyze，讀出原因並說明為何拒絕比硬給分數好。
-4. 說明 2D 是平面對照，3D world landmarks 才是本專題綠/紅判定依據；同時承認它仍是單張影像估計。
-5. 說明至少兩項限制：例如不能分析完整揮拍或影片、範例結果不等於教練建議、圖片品質會影響、不得把私人照片留存或公開。
+1. Successfully start the local page and explain that it binds only to local `127.0.0.1`, with no API key, account, or public publishing.
+2. Get green or red from one authorized example, pointing out which arm was measured, the displayed angle, and the current demonstration range.
+3. Get cannot analyze from another authorized example, read out the reason, and explain why refusing is better than forcing a score.
+4. Explain that 2D is a flat reference, the 3D world landmarks are the basis for this project's green/red verdict, and acknowledge it is still a single-image estimate.
+5. State at least two limitations: for example, it cannot analyze a full swing or video, example results are not coach advice, image quality affects it, and private photos must not be retained or published.
 
-若學生能完成以上五項，就表示他們驗收的是專題真正承諾的行為：可解釋的本機單張量測，以及在證據不足時誠實拒絕。
+If students can complete these five items, they have verified the behavior the project actually promises: an explainable local single-photo measurement, and an honest refusal when the evidence is insufficient.
 
-## 加做：真正修改一行 Python（10 分鐘）
+## Bonus: Really Change One Line of Python (10 Minutes)
 
-開啟 `streamlit_app.py`，找到 `st.title("🎾 TennisPose")`，改成 `st.title("🎾 我們這組的網球角度實驗")`，存檔後回到瀏覽器。若看到 Rerun 提示就按下；否則重新整理。
+Open `streamlit_app.py`, find `st.title("🎾 TennisPose")`, and change it to `st.title("🎾 Our Group's Tennis Angle Experiment")`, save, and return to the browser. If a Rerun prompt appears, press it; otherwise refresh.
 
-請學生指出「哪一行程式改了、頁面哪裡改了、角度計算是否改了」。答案：只改標題，量測邏輯沒有改。再用同一張 McEnroe 圖片確認角度與顏色一致。這是最小的修改與回歸驗證練習。
+Ask students to point out "which line of code changed, where the page changed, and whether the angle calculation changed". The answer: only the title changed; the measurement logic did not. Then use the same McEnroe photo to confirm the angle and color are consistent. This is the smallest modification-and-regression-check exercise.
 
-## 啟動器復原操作
+## Launcher Recovery Operations
 
-- Mac 解壓縮後無法雙擊時：開啟 Terminal，輸入 `cd `（後面有空白），把專案資料夾拖入視窗，按 Enter，再執行 `bash start.command`。
-- 缺少 Python 時：先依 README 的官方安裝來源安裝 64 位元 Python 3.11。Windows 安裝時包含 Python Launcher 並勾選 PATH；不要只安裝最新的其他主版本。
-- 顯示環境不相容時：關閉所有 TennisPose 視窗，把 `.venv` 改名為 `.venv-backup` 後重跑。Mac Finder 可按 Command+Shift+句點顯示隱藏檔。不要改名程式碼或照片資料夾。
-- 顯示 `.tennispose-setup.lock` 已存在時：先確認沒有其他安裝終端在跑；若先前安裝已中斷，關閉相關終端後在專案資料夾刪除這個鎖定檔，再重試。它不含照片或程式碼。
-- `--setup-only` 可在課前先安裝與驗證而不開網頁。`--repair` 會重新執行套件安裝，需要網路；若套件檔案損壞，改用上述重建 `.venv` 流程。
+- When a Mac cannot double-click after extraction: open Terminal, type `cd ` (with a trailing space), drag the project folder into the window, press Enter, then run `bash start.command`.
+- When Python is missing: first install 64-bit Python 3.11 from the official installation source in the README. On Windows, include the Python Launcher and check PATH during installation; do not install only the latest other major version.
+- When an incompatible environment is reported: close all TennisPose windows, rename `.venv` to `.venv-backup`, and rerun. In Mac Finder, press Command+Shift+period to show hidden files. Do not rename code or photo folders.
+- When `.tennispose-setup.lock` is reported to exist: first confirm no other installation terminal is running; if a previous installation was interrupted, close the related terminals, delete this lock file in the project folder, and retry. It contains no photos or code.
+- `--setup-only` can install and verify before class without opening the web page. `--repair` reruns the package installation and needs the network; if package files are damaged, use the `.venv` rebuild flow above instead.
 
-## 老師補充：本機運算不等於所有套件完全不連網
+## Teacher's Note: Local Computation Does Not Mean Every Package Is Fully Offline
 
-本次測試看到既有 MediaPipe 0.10.35 的背景 Clearcut 遙測傳送失敗訊息；這不代表已確認照片外傳，也沒有驗證傳送內容。啟動器關掉的是 Streamlit 使用統計，不能因此保證 MediaPipe 也沒有遙測。課堂使用已授權範例，並把「本機做推論」與「已驗證完全零網路」分開說明。更嚴格的隱私驗收需要另外檢查依賴與網路行為。
+In this testing, the existing MediaPipe 0.10.35 background Clearcut telemetry was seen sending failure messages; that does not confirm photos were sent out, and the sent content was not verified. What the launcher turns off is Streamlit usage statistics, so it cannot guarantee MediaPipe also has no telemetry. Use the authorized examples in class, and explain "inference runs locally" separately from "verified fully zero-network". A stricter privacy acceptance requires separately checking dependency and network behavior.

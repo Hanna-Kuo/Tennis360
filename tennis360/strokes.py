@@ -10,6 +10,9 @@ is labeled as one in user-facing text: the pipeline assumes a side-ish view
 of a single swing and cannot certify the exact contact frame from monocular
 landmarks. When a clip holds several swings, the moment searches are
 bounded to the one swing that contains the chosen contact.
+``analyze_repetitions`` builds on this for multi-repetition practice
+clips: it segments the timeline into one window per repetition and runs
+the same single-swing analysis on each window.
 
 The key-moment model mirrors the mobile Live app so both versions analyze
 the same checkpoints for each stroke (two-version parity).
@@ -21,7 +24,7 @@ replace them via ``default_targets.yaml`` and set source to "coach".
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from math import isfinite
 
 from tennis360.config import Targets
@@ -129,6 +132,26 @@ def _smooth(values: list[float], window: int = 3) -> list[float]:
     return smoothed
 
 
+def _forward_run(velocities: list[float], peak: int) -> tuple[int, int]:
+    """Sample range of the forward-motion run around a velocity peak.
+
+    Returns (run_start, run_end); the run covers sample positions
+    run_start .. run_end + 1. A brief pause or slight drift below 10% of
+    the peak speed does not end the run.
+    """
+
+    forward_sign = 1.0 if velocities[peak] > 0 else -1.0
+    oriented = [step * forward_sign for step in velocities]
+    tolerance = 0.1 * abs(velocities[peak])
+    run_start = peak
+    while run_start > 0 and oriented[run_start - 1] >= -tolerance:
+        run_start -= 1
+    run_end = peak
+    while run_end < len(velocities) - 1 and oriented[run_end + 1] >= -tolerance:
+        run_end += 1
+    return run_start, run_end
+
+
 def find_key_moments(samples: list[SwingSample]) -> KeyMoments | None:
     """Locate backswing, contact, and follow-through from the wrist path.
 
@@ -155,18 +178,9 @@ def find_key_moments(samples: list[SwingSample]) -> KeyMoments | None:
     contact = min(peak + 1, len(samples) - 1)
 
     # The swing containing the contact is the run of forward wrist motion
-    # around the peak velocity: expand both ways while the wrist keeps
-    # moving forward (a brief pause or slight drift below 10% of the peak
-    # speed does not end the run). The run covers sample positions
+    # around the peak velocity. The run covers sample positions
     # run_start .. run_end + 1.
-    oriented = [step * forward_sign for step in velocities]
-    tolerance = 0.1 * abs(velocities[peak])
-    run_start = peak
-    while run_start > 0 and oriented[run_start - 1] >= -tolerance:
-        run_start -= 1
-    run_end = peak
-    while run_end < len(velocities) - 1 and oriented[run_end + 1] >= -tolerance:
-        run_end += 1
+    run_start, run_end = _forward_run(velocities, peak)
 
     # Farthest wrist position opposite the swing direction, before contact,
     # searched only inside this swing's forward run.
@@ -190,6 +204,28 @@ def find_key_moments(samples: list[SwingSample]) -> KeyMoments | None:
         followthrough=followthrough,
         forward_sign=forward_sign,
     )
+
+
+def _overhead_window(rises: list[float], contact: int) -> tuple[int, int] | None:
+    """Sample range of the up-and-down motion containing a wrist-rise peak.
+
+    Expands from the peak while the wrist height keeps falling toward it
+    (backwards) or away from it (forwards). A small plateau (within 5% of
+    the total height span) does not end the motion. Returns None when the
+    peak sits at either end of the series.
+    """
+
+    if contact == 0 or contact == len(rises) - 1:
+        return None
+    span = rises[contact] - min(rises)
+    tolerance = 0.05 * span
+    start = contact
+    while start > 0 and rises[start - 1] <= rises[start] + tolerance:
+        start -= 1
+    end = contact
+    while end < len(rises) - 1 and rises[end + 1] <= rises[end] + tolerance:
+        end += 1
+    return start, end
 
 
 def find_overhead_moments(samples: list[SwingSample]) -> KeyMoments | None:
@@ -221,22 +257,13 @@ def find_overhead_moments(samples: list[SwingSample]) -> KeyMoments | None:
         return None
     rises = _smooth([s.wrist_rise for s in samples])
     contact = max(range(len(rises)), key=lambda i: rises[i])
-    if contact == 0 or contact == len(rises) - 1:
-        return None
     # Bound the searches to the single up-and-down motion that contains the
-    # peak: expand from the contact while the wrist height keeps falling
-    # toward it (backwards) or away from it (forwards). A small plateau
-    # (within 5% of the total height span) does not end the motion, so an
-    # earlier or later overhead in the same clip cannot lend its
-    # preparation dip or follow-through dip to this one.
-    span = rises[contact] - min(rises)
-    tolerance = 0.05 * span
-    start = contact
-    while start > 0 and rises[start - 1] <= rises[start] + tolerance:
-        start -= 1
-    end = contact
-    while end < len(rises) - 1 and rises[end + 1] <= rises[end] + tolerance:
-        end += 1
+    # peak, so an earlier or later overhead in the same clip cannot lend
+    # its preparation dip or follow-through dip to this one.
+    window = _overhead_window(rises, contact)
+    if window is None:
+        return None
+    start, end = window
     preparation = min(range(start, contact + 1), key=lambda i: rises[i])
     if rises[contact] - rises[preparation] < 1e-9:
         return None
@@ -993,3 +1020,289 @@ def analyze_swing(
         )
     suggestions = _SUGGESTIONS[action](metrics, targets)
     return moments, metrics, suggestions
+
+
+# --- multi-repetition segmentation --------------------------------------------
+# A practice clip usually holds ONE stroke performed MANY times. The
+# single-swing analysis above deliberately grades only one swing; the
+# functions below scan the sampled timeline sequentially — each
+# repetition is located by a fresh search that starts after the
+# previous repetition's motion ended, so separate repetitions can
+# never be merged into one — then run the unchanged single-swing
+# analysis on each repetition's window.
+
+# A repetition's fastest wrist motion must reach this fraction of the
+# clip's fastest motion (same direction) to count as a swing at all.
+DEMO_REP_MIN_PEAK_FRACTION = 0.4
+# Two motion peaks closer than this many samples are the same swing.
+DEMO_REP_PEAK_GAP = 2
+# An overhead repetition's wrist-rise peak must reach this fraction of the
+# clip's total rise span (measured from the lowest wrist position).
+DEMO_REP_MIN_RISE_FRACTION = 0.6
+
+
+@dataclass
+class RepResult:
+    """One repetition found in a multi-rep clip, and its analysis outcome.
+
+    ``moments`` positions are sample positions in the FULL clip's sample
+    list (not the repetition's window), matching how the single-swing
+    pipeline reports them. A repetition whose window shows no clear swing
+    has ``moments``/``metrics`` of None: it was found, but not analyzed,
+    and callers must not record it.
+    """
+
+    rep_index: int  # 1-based, in time order
+    start_pos: int  # first sample position of this repetition's window
+    end_pos: int  # last sample position (inclusive)
+    peak_pos: int  # sample position of the detected motion peak (estimate)
+    window_start_s: float
+    window_end_s: float
+    peak_time_s: float
+    contact_time_s: float | None = None  # set when the rep was analyzed
+    moments: KeyMoments | None = None
+    metrics: StrokeMetrics | None = None
+    suggestions: list[str] = field(default_factory=list)
+
+    @property
+    def analyzed(self) -> bool:
+        """True when the existing single-swing analysis measured this rep."""
+
+        return self.moments is not None and self.metrics is not None
+
+
+def _rep_slices(
+    anchors: list[int],
+    windows: list[tuple[int, int]],
+    count: int,
+) -> list[tuple[int, int, int]]:
+    """Turn accepted per-rep motion windows into analysis slices.
+
+    Slices are split at the midpoints between consecutive rep anchors, then
+    widened so each slice fully contains its rep's motion window. Returns
+    (start, end, anchor) per repetition, in time order.
+    """
+
+    slices = []
+    for i, (win_start, win_end) in enumerate(windows):
+        lo = 0 if i == 0 else (anchors[i - 1] + anchors[i]) // 2 + 1
+        hi = (
+            count - 1
+            if i == len(windows) - 1
+            else (anchors[i] + anchors[i + 1]) // 2
+        )
+        slices.append((min(lo, win_start), max(hi, win_end), anchors[i]))
+    return slices
+
+
+def _swing_rep_slices(samples: list[SwingSample]) -> list[tuple[int, int, int]]:
+    """Repetition slices for the horizontal (wrist-speed) swing model.
+
+    Candidate repetitions are the fast wrist motions in the same direction
+    as the clip's fastest motion — the backswing and the between-rep
+    recovery move the other way, so they cannot become phantom reps.
+    Candidates are scanned in time order, each search starting after the
+    previous repetition's motion run ended; a candidate is dropped when
+    its forward-motion run overlaps an already accepted rep's run (two
+    fast steps of one swing share one run).
+    """
+
+    xs = _smooth([s.wrist_x for s in samples])
+    velocities = [xs[i + 1] - xs[i] for i in range(len(xs) - 1)]
+    if not velocities:
+        return []
+    peak = max(range(len(velocities)), key=lambda i: abs(velocities[i]))
+    if abs(velocities[peak]) < 1e-9:
+        return []
+    forward_sign = 1.0 if velocities[peak] > 0 else -1.0
+    threshold = DEMO_REP_MIN_PEAK_FRACTION * abs(velocities[peak])
+    candidates = [
+        i for i, step in enumerate(velocities) if step * forward_sign >= threshold
+    ]
+
+    accepted: list[tuple[int, tuple[int, int]]] = []  # (velocity peak, run)
+    accepted_windows: list[tuple[int, int]] = []  # sample range per accepted run
+    cursor = 0  # first velocity step not inside an accepted swing
+    for i in candidates:
+        if i < cursor:
+            continue
+        if any(abs(i - other) <= DEMO_REP_PEAK_GAP for other, _ in accepted):
+            continue
+        run = _forward_run(velocities, i)
+        window = (run[0], run[1] + 1)  # sample range of this swing
+        if any(
+            window[0] <= other[1] and other[0] <= window[1]
+            for other in accepted_windows
+        ):
+            continue
+        accepted.append((i, run))
+        accepted_windows.append(window)
+        cursor = run[1] + 1
+
+    anchors = [min(i + 1, len(samples) - 1) for i, _ in accepted]
+    windows = [(run[0], run[1] + 1) for _, run in accepted]
+    return _rep_slices(anchors, windows, len(samples))
+
+
+def _overhead_rep_slices(samples: list[SwingSample]) -> list[tuple[int, int, int]]:
+    """Repetition slices for the vertical (wrist-rise) overhead model.
+
+    Candidate repetitions are wrist-rise peaks near the top of the clip's
+    rise span, scanned in time order — each search starts after the
+    previous repetition's up-and-down window ended — and a candidate is
+    dropped when its window overlaps an accepted rep's window.
+    """
+
+    rises = _smooth([s.wrist_rise for s in samples])
+    low, high = min(rises), max(rises)
+    span = high - low
+    if span < 1e-9:
+        return []
+    threshold = low + DEMO_REP_MIN_RISE_FRACTION * span
+    candidates = [i for i, rise in enumerate(rises) if rise >= threshold]
+
+    accepted: list[tuple[int, tuple[int, int]]] = []  # (peak, window)
+    cursor = 0  # first sample not inside an accepted repetition
+    for i in candidates:
+        if i < cursor:
+            continue
+        # The repetition's peak is the highest sample of the
+        # above-threshold cluster this candidate belongs to.
+        cluster_end = i
+        while (
+            cluster_end + 1 < len(rises)
+            and rises[cluster_end + 1] >= threshold
+        ):
+            cluster_end += 1
+        peak = max(range(i, cluster_end + 1), key=lambda j: rises[j])
+        if any(abs(peak - other) <= DEMO_REP_PEAK_GAP for other, _ in accepted):
+            cursor = cluster_end + 1
+            continue
+        window = _overhead_window(rises, peak)
+        if window is None:
+            cursor = cluster_end + 1
+            continue
+        # Clip the window to this repetition's own valleys: the
+        # tolerant expansion in _overhead_window can wander through
+        # a flat between-repetition valley into the next repetition's
+        # motion, which would make two distinct repetitions look like
+        # one overlapping window. The window ends at the valley where
+        # this repetition's descent bottoms out and starts at the
+        # valley its own climb rose from.
+        tolerance = 0.05 * (rises[peak] - low)
+        valley_end = peak
+        lowest = rises[peak]
+        j = peak
+        while j + 1 < len(rises):
+            if rises[j + 1] < lowest:
+                lowest = rises[j + 1]
+                valley_end = j + 1
+            if j + 1 > valley_end and rises[j + 1] > lowest + tolerance:
+                break
+            j += 1
+        valley_start = peak
+        lowest = rises[peak]
+        j = peak
+        while j - 1 >= 0:
+            if rises[j - 1] < lowest:
+                lowest = rises[j - 1]
+                valley_start = j - 1
+            if j - 1 < valley_start and rises[j - 1] > lowest + tolerance:
+                break
+            j -= 1
+        window = (
+            max(window[0], valley_start + 1 if accepted else valley_start),
+            min(window[1], valley_end),
+        )
+        if any(
+            window[0] <= other_window[1] and other_window[0] <= window[1]
+            for _, other_window in accepted
+        ):
+            cursor = window[1] + 1
+            continue
+        accepted.append((peak, window))
+        cursor = window[1] + 1
+
+    anchors = [i for i, _ in accepted]
+    windows = [window for _, window in accepted]
+    return _rep_slices(anchors, windows, len(samples))
+
+
+def find_rep_windows(
+    action: str, samples: list[SwingSample]
+) -> list[tuple[int, int]]:
+    """Locate every repetition of ``action`` in a multi-rep clip.
+
+    Returns one (start, end) sample-position window per repetition, in
+    time order. Windows are estimates from the same motion signals the
+    single-swing key-moment detection uses; a window only means "a swing
+    seems to happen here" — whether it can be measured is decided by
+    running the single-swing analysis on it (see analyze_repetitions).
+    """
+
+    if action not in _SUGGESTIONS:
+        raise ValueError(f"Unknown swing action: {action}")
+    if len(samples) < 3:
+        return []
+    slices = (
+        _overhead_rep_slices(samples)
+        if action == "overhead"
+        else _swing_rep_slices(samples)
+    )
+    return [(start, end) for start, end, _anchor in slices]
+
+
+def analyze_repetitions(
+    action: str,
+    samples: list[SwingSample],
+    targets: Targets | None = None,
+) -> list[RepResult]:
+    """Analyze every repetition of one stroke in a multi-rep clip.
+
+    The clip is segmented into one window per repetition
+    (find_rep_windows), and the existing single-swing analysis runs on
+    each window unchanged — same measurements, target ranges, and feedback
+    rules. Repetitions whose window shows no clear swing come back with
+    ``analyzed`` False and the single-swing explanation in ``suggestions``.
+    """
+
+    if action not in _SUGGESTIONS:
+        raise ValueError(f"Unknown swing action: {action}")
+    if len(samples) < 3:
+        return []
+    slices = (
+        _overhead_rep_slices(samples)
+        if action == "overhead"
+        else _swing_rep_slices(samples)
+    )
+    results: list[RepResult] = []
+    for rep_index, (start, end, anchor) in enumerate(slices, start=1):
+        window = samples[start : end + 1]
+        moments, metrics, suggestions = analyze_swing(action, window, targets)
+        global_moments = None
+        contact_time_s = None
+        if moments is not None:
+            global_moments = KeyMoments(
+                backswing=moments.backswing + start,
+                contact=moments.contact + start,
+                followthrough=moments.followthrough + start,
+                forward_sign=moments.forward_sign,
+                heuristic=moments.heuristic,
+            )
+            contact_time_s = samples[global_moments.contact].time_s
+        results.append(
+            RepResult(
+                rep_index=rep_index,
+                start_pos=start,
+                end_pos=end,
+                peak_pos=anchor,
+                window_start_s=samples[start].time_s,
+                window_end_s=samples[end].time_s,
+                peak_time_s=samples[anchor].time_s,
+                contact_time_s=contact_time_s,
+                moments=global_moments,
+                metrics=metrics,
+                suggestions=suggestions,
+            )
+        )
+    return results

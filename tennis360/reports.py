@@ -37,7 +37,11 @@ def _rows_to_frame(rows: Sequence[Mapping]) -> "object":
         issue = mapping.get("main_issue_en") or ""
         records.append(
             {
-                "Date/Time": mapping.get("recorded_at", ""),
+                # The record's effective time point: its capture time
+                # when the source carries one, else its save time —
+                # the same time every other view shows.
+                "Date/Time": mapping.get("captured_at")
+                or mapping.get("recorded_at", ""),
                 "Source File": mapping.get("source_file", ""),
                 "Action": str(mapping.get("action", "")),
                 "Camera Angle": mapping.get("camera_angle", ""),

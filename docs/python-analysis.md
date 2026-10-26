@@ -79,6 +79,14 @@ python -m tennis360.cli analyze drop1.mp4 --action drop-shot
 python -m tennis360.cli analyze lob1.mp4 --action lob
 python -m tennis360.cli analyze halfvolley1.mp4 --action half-volley
 
+# Multi-stroke practice clips: analyze EVERY stroke in the video; each
+# analyzed stroke is stored as its own history record (tagged with its
+# stroke number and key-moment time). A stroke that cannot be validly
+# analyzed is reported as "Invalid — Not Recorded" with the reason and
+# is not stored.
+python -m tennis360.cli analyze practice.mp4 --action forehand --reps
+python -m tennis360.cli analyze serves.mp4 --action serve --reps
+
 # History, trend chart, report export
 python -m tennis360.cli history --action forehand --limit 20
 python -m tennis360.cli trend --action forehand --out trend.png

@@ -29,29 +29,32 @@ A Green result indicates that the *measured elbow angle* is inside the selected 
 
 ### 2. Stroke Video Analysis
 
-Upload a video, choose the tennis action, and receive a breakdown of its movement checkpoints.
+Upload a video, select a tennis stroke, and analyze multiple attempts from the same practice clip.
 
-- Supports **12 tennis actions**, including serves, topspin groundstrokes, slices, volleys, overheads, and specialty shots.
-- Accepts **MP4, MOV, and M4V** uploads.
-- Samples video frames locally and uses pose landmarks to estimate key moments in the stroke.
-- Reports timing information for relevant phases, such as **Preparation**, **Contact**, and **Follow-Through**. Serve analysis focuses on the detected Trophy Pose.
-- Displays movement-specific measurements, which may include elbow angle, shoulder turn, wrist position, contact-point location, follow-through, and backswing characteristics.
-- Offers suggested technique adjustments based on the detected checkpoints.
-- Generates a **skeleton visualization** highlighting the analyzed arm and measured elbow angle; when applicable, a dashed reference arm illustrates a target position.
+- Supports **12 tennis actions**, including serves, groundstrokes, slices, volleys, overheads, and specialty shots.
+- Accepts **MP4, MOV, and M4V** videos and processes them locally.
+- **Analyze All Strokes** identifies individual attempts in the video and analyzes each one separately, so there is no need to trim every stroke into a different file.
+- Lists each detected stroke by number, estimated contact or key-moment time, time range in the video, elbow angle, target-range result, and feedback.
+- Shows a body-landmark skeleton and highlighted elbow angle for individual strokes, with a suggested adjustment when applicable.
+- Identifies attempts that cannot be measured reliably and explains why they were not recorded.
+- Saves each successfully analyzed stroke as a separate entry in **Progress**. Analyzing the same video again does not create duplicate entries.
+- Measures additional movement checkpoints where supported, such as preparation, follow-through, contact-point position, wrist movement, and shoulder turn.
 
-**Important:** Detected phases and contact times are estimates based on visible motion, not precise racket–ball contact detection. The measurements and feedback available depend on the selected stroke and the usable video data.
+For serves, analysis focuses on the estimated Trophy Pose. For other strokes, the reported contact moment is an estimate based on movement in the video, not an exact measurement of racket–ball contact.
 
 ### 3. Progress Tracking
 
-Review saved measurements to see how your technique measurements vary over time.
+Keep a record of your practice and compare measured elbow angles across attempts.
 
-- Saves measurements from successful photo and video analyses.
-- Displays a **line chart of elbow angles over time** for the selected stroke.
-- Highlights the demonstration target-angle range on the graph.
-- Shows a table of recent analyses, including dates, measured angles, whether a measurement fell within the target range, and analysis results.
-- Keeps measurement history in a **local SQLite database**, without saving uploaded photos or videos to that history.
+- View separate progress charts for each supported tennis stroke.
+- See **one point per saved attempt**, numbered in the order the strokes were recorded or analyzed.
+- Compare measurements against the selected stroke's demonstration target range.
+- Review practice history grouped by recording date, using the photo or video's capture time when available and the saved analysis time otherwise.
+- Open a table showing attempt number, date and time, measured elbow angle, whether it was in range, time within the source video, and analysis result.
+- Select and delete individual records you no longer want to keep, with confirmation before deletion.
+- Store measurements in a **local SQLite database** without storing uploaded photos or videos in the history.
 
-Progress graphs show measurement trends, **not an overall performance grade**. A changing angle does not necessarily indicate improvement without considering the stroke, camera view, and context.
+The charts show how measurements vary from attempt to attempt, not an overall tennis performance score. The displayed ranges are for demonstration and have not yet been validated by coaches.
 
 ## Supported Tennis Actions
 
@@ -70,7 +73,7 @@ Progress graphs show measurement trends, **not an overall performance grade**. A
 | 11 | Drop Shot — Forehand | — | ✅ |
 | 12 | Lob — Forehand | — | ✅ |
 
-Future development will expand Tennis360’s range of supported strokes and variations, along with Ready Position and Footwork analysis.
+Future updates will add more tennis strokes and variations, as well as Ready Position and Footwork analysis.
 
 ## How Tennis360 Works
 
@@ -144,9 +147,9 @@ Keep Terminal open while using Tennis360. Press `Ctrl+C` to stop the application
 
 **Serve Photo Analysis:** Select the mode, upload a Trophy Pose image, choose automatic or manual racket-arm selection, and review the annotated image, elbow-angle estimate, result, and measurement details.
 
-**Stroke Video Analysis:** Select the mode, choose a stroke and arm, upload a supported video, click **Analyze Video**, and review key moments, measured checkpoints, suggestions, and the skeleton visualization.
+**Stroke Video Analysis:** Select a stroke and racket arm, upload a video, then click **Analyze All Strokes**. Tennis360 detects and evaluates individual attempts in the clip. You can review each stroke in the results table and the accompanying diagrams. Successfully analyzed attempts are saved to Progress; invalid attempts are listed with an explanation but are not saved.
 
-**Progress:** Select the mode and stroke to view your saved elbow-angle trend and recent analysis records.
+**Progress:** Select a stroke to see an elbow-angle chart by attempt, review saved measurements and recording dates, or remove selected records.
 
 ## Privacy and Local Storage
 
@@ -181,8 +184,6 @@ There is still a lot I want to add to Tennis360, especially more stroke coverage
 - **Side-by-Side Pose Comparison:** Compare a player's movement with a reference technique example.
 - **Improved Camera-Angle Awareness:** Combine additional signals to detect difficult viewing angles and improve the reliability of pose measurements.
 - **Richer Progress Reports:** Show movement-specific changes across multiple sessions as more validated measurements become available.
-
-**Already implemented:** Stroke Video Analysis and Progress Tracking. These are current features, not future milestones.
 
 ## Limitations
 

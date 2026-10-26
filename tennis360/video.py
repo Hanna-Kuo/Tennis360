@@ -3,6 +3,9 @@
 Capabilities:
 - batch analysis of many videos (or photos) through one call;
 - per-frame trophy-gate scanning to find serve preparation segments;
+- multi-repetition analysis: every repetition of one stroke in a practice
+  clip is segmented, analyzed, and reported separately (serves scored from
+  the scan's own trophy-frame measurement, one per repetition);
 - keyframe extraction (trophy pose + an estimated post-trophy frame);
 - skeleton-annotated mp4 output;
 - side + front multi-angle fusion (side: elbow angle, front: toss/turn).
@@ -23,6 +26,8 @@ import numpy as np
 
 from tennis360.annotate import draw_measured_arm, draw_skeleton
 from tennis360.pose_detector import (
+    DEFAULT_TROPHY_MAXIMUM,
+    DEFAULT_TROPHY_MINIMUM,
     LEFT_ARM_INDICES,
     LEFT_HIP,
     LEFT_SHOULDER,
@@ -42,11 +47,18 @@ from tennis360.pose_math import (
     has_reliable_point,
     is_in_preparation_position,
 )
+from tennis360.repetitions import (
+    MIN_TROPHY_PEAK_SEPARATION_S,
+    ServeSample,
+    best_trophy_sample,
+    find_serve_actions,
+)
 from tennis360.strokes import (
     SWING_ACTIONS,
     KeyMoments,
     StrokeMetrics,
     SwingSample,
+    analyze_repetitions,
     analyze_swing,
 )
 
@@ -233,14 +245,25 @@ def _find_segments(frames: list[FrameAnalysis]) -> list[tuple[int, int]]:
     return [seg for seg in segments if seg[1] - seg[0] >= 1]
 
 
+def _best_frame_in_segment(
+    frames: list[FrameAnalysis], segment: tuple[int, int]
+) -> FrameAnalysis:
+    """Pick the sampled frame with the highest wrist inside one segment."""
+
+    candidates = frames[segment[0] : segment[1] + 1]
+    return max(
+        candidates,
+        key=lambda f: f.wrist_rise if f.wrist_rise is not None else -9.0,
+    )
+
+
 def _best_trophy_frame(
     frames: list[FrameAnalysis], segments: list[tuple[int, int]]
 ) -> int:
     """Pick the sampled frame with the highest wrist inside the longest segment."""
 
     longest = max(segments, key=lambda seg: seg[1] - seg[0])
-    candidates = frames[longest[0] : longest[1] + 1]
-    best = max(candidates, key=lambda f: f.wrist_rise if f.wrist_rise is not None else -9.0)
+    best = _best_frame_in_segment(frames, longest)
     return frames.index(best)
 
 
@@ -584,28 +607,20 @@ def _observe_swing_sample(
     )
 
 
-def analyze_groundstroke(
+def _sample_swing_frames(
     path: str | Path,
-    action: str = "forehand",
-    arm: ArmChoice = "auto",
+    action: str,
+    arm: ArmChoice,
     *,
-    sample_fps: float = 5.0,
-    minimum_visibility: float = DEFAULT_MINIMUM_VISIBILITY,
+    sample_fps: float,
+    minimum_visibility: float,
     model_path=None,
-    targets=None,
-) -> GroundstrokeAnalysis:
-    """Analyze one swing clip with the key-moment model of the given action.
+) -> tuple[list[SwingSample], float, Arm, Arm | None]:
+    """Sample one clip into SwingSamples (shared by single/rep analysis).
 
-    ``action`` is one of the SWING_ACTIONS values (forehand, backhand-one,
-    backhand-two, forehand-slice, backhand-slice, overhead,
-    volley-forehand, volley-backhand).
-    The overhead uses the vertical key-moment model; all others use
-    backswing / contact / follow-through.
-    Key-moment detection is an estimate (see tennis360.strokes).
+    Returns (samples, fps, hitting arm, second arm). Raises ValueError
+    when the video cannot be opened.
     """
-
-    if action not in SWING_ACTIONS:
-        raise ValueError(f"Unknown swing action: {action}")
 
     from tennis360.pose_detector import DEFAULT_MODEL_PATH
 
@@ -645,10 +660,44 @@ def analyze_groundstroke(
                         samples.append(sample)
         index += 1
     capture.release()
+    return samples, fps, hitting_arm, second_arm
+
+
+def analyze_groundstroke(
+    path: str | Path,
+    action: str = "forehand",
+    arm: ArmChoice = "auto",
+    *,
+    sample_fps: float = 5.0,
+    minimum_visibility: float = DEFAULT_MINIMUM_VISIBILITY,
+    model_path=None,
+    targets=None,
+) -> GroundstrokeAnalysis:
+    """Analyze one swing clip with the key-moment model of the given action.
+
+    ``action`` is one of the SWING_ACTIONS values (forehand, backhand-one,
+    backhand-two, forehand-slice, backhand-slice, overhead,
+    volley-forehand, volley-backhand).
+    The overhead uses the vertical key-moment model; all others use
+    backswing / contact / follow-through.
+    Key-moment detection is an estimate (see tennis360.strokes).
+    """
+
+    if action not in SWING_ACTIONS:
+        raise ValueError(f"Unknown swing action: {action}")
+
+    samples, fps, hitting_arm, second_arm = _sample_swing_frames(
+        path,
+        action,
+        arm,
+        sample_fps=sample_fps,
+        minimum_visibility=minimum_visibility,
+        model_path=model_path,
+    )
 
     moments, metrics, suggestions = analyze_swing(action, samples, targets)
     return GroundstrokeAnalysis(
-        source=source,
+        source=str(path),
         action=action,
         fps=fps,
         arm=hitting_arm,
@@ -659,6 +708,241 @@ def analyze_groundstroke(
         suggestions=suggestions,
         sample_times=[s.time_s for s in samples],
     )
+
+
+# --- multi-repetition analysis -------------------------------------------------
+# Practice clips hold ONE stroke performed MANY times. The clip is sampled
+# once; tennis360.strokes segments the samples into one window per
+# repetition and runs the unchanged single-swing analysis on each window.
+
+
+@dataclass
+class RepetitionSwingAnalysis:
+    """Every repetition of one stroke found in a multi-rep clip.
+
+    ``rep_results`` carries the pure per-repetition outcomes (used for
+    history recording); ``rep_analyses`` carries the same repetitions as
+    GroundstrokeAnalysis values whose key-moment positions refer to the
+    full clip's sample list (used for display).
+    """
+
+    source: str
+    action: str
+    fps: float
+    arm: Arm | None
+    second_arm: Arm | None
+    sampled_frames: int
+    sample_times: list[float] = field(default_factory=list)
+    rep_results: list = field(default_factory=list)
+    rep_analyses: list = field(default_factory=list)
+
+
+def analyze_groundstroke_reps(
+    path: str | Path,
+    action: str = "forehand",
+    arm: ArmChoice = "auto",
+    *,
+    sample_fps: float = 5.0,
+    minimum_visibility: float = DEFAULT_MINIMUM_VISIBILITY,
+    model_path=None,
+    targets=None,
+) -> RepetitionSwingAnalysis:
+    """Analyze EVERY repetition of one stroke in a practice clip.
+
+    Same sampling and single-swing analysis as analyze_groundstroke; the
+    only difference is that the sampled timeline is segmented into
+    repetitions first (see tennis360.strokes.analyze_repetitions), so each
+    repetition is measured and reported separately.
+    """
+
+    if action not in SWING_ACTIONS:
+        raise ValueError(f"Unknown swing action: {action}")
+
+    samples, fps, hitting_arm, second_arm = _sample_swing_frames(
+        path,
+        action,
+        arm,
+        sample_fps=sample_fps,
+        minimum_visibility=minimum_visibility,
+        model_path=model_path,
+    )
+    sample_times = [s.time_s for s in samples]
+    rep_results = analyze_repetitions(action, samples, targets)
+    rep_analyses = [
+        GroundstrokeAnalysis(
+            source=str(path),
+            action=action,
+            fps=fps,
+            arm=hitting_arm,
+            second_arm=second_arm,
+            sampled_frames=len(samples),
+            moments=rep.moments,
+            metrics=rep.metrics,
+            suggestions=list(rep.suggestions),
+            sample_times=sample_times,
+        )
+        for rep in rep_results
+    ]
+    return RepetitionSwingAnalysis(
+        source=str(path),
+        action=action,
+        fps=fps,
+        arm=hitting_arm,
+        second_arm=second_arm,
+        sampled_frames=len(samples),
+        sample_times=sample_times,
+        rep_results=rep_results,
+        rep_analyses=rep_analyses,
+    )
+
+
+def read_frame_rgb(path: str | Path, frame_index: int) -> np.ndarray | None:
+    """Read one video frame as an RGB array, or None when it cannot be read."""
+
+    capture = cv2.VideoCapture(str(path))
+    try:
+        if not capture.isOpened():
+            return None
+        capture.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
+        ok, frame_bgr = capture.read()
+        if not ok:
+            return None
+        return cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2RGB)
+    finally:
+        capture.release()
+
+
+@dataclass
+class ServeRep:
+    """One serve repetition: its window in the clip and its outcome.
+
+    ``segment_start_s``/``segment_end_s`` are the serve's own window in
+    the source video (where its climb began and where it completed),
+    found by the sequential serve scan. ``angle_degrees``/``in_range``
+    are the video scan's measurement at the repetition's trophy frame
+    — the frame the single analysis's best-frame rule picks inside
+    this serve's window — or None when the window held no measured
+    trophy frame (``error`` then says why).
+    """
+
+    rep_index: int  # 1-based, in time order
+    segment_start_s: float
+    segment_end_s: float
+    trophy_time_s: float
+    trophy_frame_index: int
+    arm: Arm | None
+    angle_degrees: float | None = None
+    in_range: bool | None = None
+    error: str | None = None
+
+
+def analyze_serve_repetitions(
+    path: str | Path,
+    arm: ArmChoice = "auto",
+    *,
+    demo_minimum: float = DEFAULT_TROPHY_MINIMUM,
+    demo_maximum: float = DEFAULT_TROPHY_MAXIMUM,
+    sample_fps: float = 5.0,
+    minimum_visibility: float = DEFAULT_MINIMUM_VISIBILITY,
+    model_path=None,
+    min_peak_separation_s: float = MIN_TROPHY_PEAK_SEPARATION_S,
+) -> list[ServeRep]:
+    """Analyze every serve in a multi-serve clip, one measurement each.
+
+    The sampled timeline is scanned SEQUENTIALLY for individual serves
+    (tennis360.repetitions.find_serve_actions): the timeline is split
+    at sample gaps first (in automatic arm mode only preparation
+    samples are kept, so between serves the timeline is empty for
+    seconds and the gap itself is the boundary), and each serve is
+    located by a fresh search that starts only after the previous
+    serve completed, so the pauses between serves can never merge
+    several serves into one repetition — unlike the trophy-segment
+    list used by the single analysis, whose contiguous-gate grouping
+    can bridge the between-serve gaps into one long segment. A counted
+    serve's window must contain a preparation sample: the motion must
+    pass through the trophy position.
+
+    Each serve is then scored by the SAME machinery the single video
+    analysis scores a whole clip with: the scan's own per-frame
+    measurements, taking the highest-wrist preparation frame inside
+    the window as that serve's trophy frame (tennis360.repetitions
+    .best_trophy_sample, the per-window form of _best_frame_in_segment)
+    and comparing its elbow angle with the demo range. A repetition
+    whose window holds no measured trophy frame comes back with an
+    error and is not a measurement.
+
+    The still-photo pipeline (analyze_rgb_image) is deliberately NOT
+    used here. Its guards are written for one uploaded trophy still —
+    a player-focus crop with re-detection and torso association,
+    both-arms phase cues that must coexist in a single frame, and
+    repeat transformed passes that must agree on the same subject.
+    Applied to frames of a wide court video they refuse serves the
+    video scan itself detected and measured on the identical pixels:
+    the focus crop fires whenever the player is small in the frame
+    and its re-detection can lose or swap the player, and at the
+    racket-wrist peak sample the tossing arm has usually already
+    dropped, so the photo phase gate fails. (The one other video
+    caller of the photo pipeline, extract_keyframes, likewise turns
+    its stability passes off.) The photo pipeline is unchanged and
+    still guards every uploaded photo.
+    """
+
+    analysis = analyze_video(
+        path,
+        arm=arm,
+        sample_fps=sample_fps,
+        minimum_visibility=minimum_visibility,
+        model_path=model_path,
+    )
+    frames = analysis.frames
+    actions = find_serve_actions(
+        [frame.time_s for frame in frames],
+        [frame.wrist_rise for frame in frames],
+        min_separation_s=min_peak_separation_s,
+        in_preparation=[frame.in_preparation for frame in frames],
+    )
+    reps: list[ServeRep] = []
+    for rep_index, (start, end, peak) in enumerate(actions, start=1):
+        peak_frame = frames[peak]
+        rep = ServeRep(
+            rep_index=rep_index,
+            segment_start_s=frames[start].time_s,
+            segment_end_s=frames[end].time_s,
+            trophy_time_s=peak_frame.time_s,
+            trophy_frame_index=peak_frame.index,
+            arm=peak_frame.arm,
+        )
+        best = best_trophy_sample(
+            [
+                ServeSample(
+                    time_s=frame.time_s,
+                    frame_index=frame.index,
+                    arm=frame.arm,
+                    angle_degrees=frame.angle_3d,
+                    wrist_rise=frame.wrist_rise,
+                    in_preparation=frame.in_preparation,
+                )
+                for frame in frames[start : end + 1]
+            ]
+        )
+        if best is None:
+            rep.error = "No clear trophy frame was measured in this serve."
+        else:
+            rep.trophy_time_s = best.time_s
+            rep.trophy_frame_index = best.frame_index
+            rep.arm = best.arm or rep.arm
+            rep.angle_degrees = (
+                round(best.angle_degrees, 1)
+                if best.angle_degrees is not None
+                else None
+            )
+            rep.in_range = (
+                demo_minimum <= best.angle_degrees <= demo_maximum
+                if best.angle_degrees is not None
+                else None
+            )
+        reps.append(rep)
+    return reps
 
 
 # --- face anonymization -------------------------------------------------------
