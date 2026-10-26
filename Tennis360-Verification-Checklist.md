@@ -1,6 +1,6 @@
 # Tennis360 Serve + Strokes Verification Checklist
 
-> Scope: Verify all 12 actions — serve, forehand (topspin + slice), backhand (topspin one-handed + two-handed, slice), forehand volley, backhand volley, half-volley, overhead, drop shot, and lob. This package is complete.
+> Scope: Verify all 12 actions, one section per action, in the canonical order listed below. This package is complete.
 > All 12 actions are in this package: Serve, Forehand: Topspin, Forehand: Slice, Backhand: Topspin – Two-Handed, Backhand: Topspin – One-Handed, Backhand: Slice, Volley: Forehand, Volley: Backhand, Half-Volley: Forehand, Overhead Smash, Drop Shot: Forehand, and Lob: Forehand. The package is now complete.
 > Test Build: tennis360-serve-fh-bh.zip
 
@@ -14,7 +14,7 @@ python -m pytest tests/ -q
 
 ## 2. Serve
 
-### Photo Analysis (Optional — Hanna decided on 2026-10-24 to skip this and verify with video instead)
+### Photo Analysis
 ```bash
 streamlit run streamlit_app.py
 ```
@@ -28,7 +28,7 @@ python -m tennis360.cli analyze <serve video>.mp4 --action serve
 - Confirm: serve preparation found, no misjudgment, no crash
 - Test one front-view and one side-view clip
 
-## 3. Forehand
+## 3. Forehand: Topspin
 
 ```bash
 python -m tennis360.cli analyze <forehand video>.mp4 --action forehand
@@ -36,60 +36,59 @@ python -m tennis360.cli analyze <forehand video>.mp4 --action forehand
 - Confirm: swing found (backswing → contact → follow-through)
 - No crash
 
-## 4. Backhand
-
-```bash
-python -m tennis360.cli analyze <backhand video>.mp4 --action backhand-one
-python -m tennis360.cli analyze <backhand video>.mp4 --action backhand-two
-```
-- Test one-handed and two-handed separately
-- Confirm: swing found, no crash
-
-## 5. Slice (Forehand + Backhand)
+## 4. Forehand: Slice
 
 ```bash
 python -m tennis360.cli analyze <forehand slice video>.mp4 --action forehand-slice
-python -m tennis360.cli analyze <backhand slice video>.mp4 --action backhand-slice
 ```
-- Test forehand slice and backhand slice separately (both share the same slice analysis)
+- Both slice actions share the same slice analysis; this section covers the forehand slice
 - Confirm: swing found (backswing → contact → follow-through)
 - No crash
 
-## 6. Volley
+## 5. Backhand: Topspin – Two-Handed
+
+```bash
+python -m tennis360.cli analyze <backhand video>.mp4 --action backhand-two
+```
+- The two backhand topspins are tested separately; this section covers the two-handed backhand
+- Confirm: swing found, no crash
+
+## 6. Backhand: Topspin – One-Handed
+
+```bash
+python -m tennis360.cli analyze <backhand video>.mp4 --action backhand-one
+```
+- The two backhand topspins are tested separately; this section covers the one-handed backhand
+- Confirm: swing found, no crash
+
+## 7. Backhand: Slice
+
+```bash
+python -m tennis360.cli analyze <backhand slice video>.mp4 --action backhand-slice
+```
+- Both slice actions share the same slice analysis; this section covers the backhand slice
+- Confirm: swing found (backswing → contact → follow-through)
+- No crash
+
+## 8. Volley: Forehand
 
 ```bash
 python -m tennis360.cli analyze <volley video>.mp4 --action volley-forehand
-python -m tennis360.cli analyze <volley video>.mp4 --action volley-backhand
 ```
-- Test forehand volley and backhand volley separately
+- The two volleys are tested separately; this section covers the forehand volley
 - Confirm: volley motion found (compact backswing → contact → forward push)
 - No crash
 
-## 7. Overhead
+## 9. Volley: Backhand
 
 ```bash
-python -m tennis360.cli analyze <overhead video>.mp4 --action overhead
+python -m tennis360.cli analyze <volley video>.mp4 --action volley-backhand
 ```
-- Confirm: overhead motion found (preparation → contact at highest point → follow-through)
+- The two volleys are tested separately; this section covers the backhand volley
+- Confirm: volley motion found (compact backswing → contact → forward push)
 - No crash
 
-## 8. Drop-shot
-
-```bash
-python -m tennis360.cli analyze <drop-shot video>.mp4 --action drop-shot
-```
-- Confirm: drop-shot motion found (backswing → soft contact → short follow-through)
-- No crash
-
-## 9. Lob
-
-```bash
-python -m tennis360.cli analyze <lob video>.mp4 --action lob
-```
-- Confirm: lob motion found (low backswing → upward contact → high follow-through)
-- No crash
-
-## 10. Half-volley
+## 10. Half-Volley: Forehand
 
 ```bash
 python -m tennis360.cli analyze <half-volley video>.mp4 --action half-volley
@@ -97,7 +96,31 @@ python -m tennis360.cli analyze <half-volley video>.mp4 --action half-volley
 - Confirm: half-volley motion found (knee bend → low contact right after the bounce → compact swing)
 - No crash
 
-## 11. Website Video Mode
+## 11. Overhead Smash
+
+```bash
+python -m tennis360.cli analyze <overhead video>.mp4 --action overhead
+```
+- Confirm: overhead motion found (preparation → contact at highest point → follow-through)
+- No crash
+
+## 12. Drop Shot: Forehand
+
+```bash
+python -m tennis360.cli analyze <drop-shot video>.mp4 --action drop-shot
+```
+- Confirm: drop-shot motion found (backswing → soft contact → short follow-through)
+- No crash
+
+## 13. Lob: Forehand
+
+```bash
+python -m tennis360.cli analyze <lob video>.mp4 --action lob
+```
+- Confirm: lob motion found (low backswing → upward contact → high follow-through)
+- No crash
+
+## 14. Website Video Mode
 
 ```bash
 streamlit run streamlit_app.py
@@ -109,7 +132,7 @@ streamlit run streamlit_app.py
 - Also test serve once: Analysis Type "Stroke Video Analysis", Stroke Type "Serve", upload a serve clip
 - Confirm: each serve in the clip is listed with its trophy-frame time and elbow angle
 
-## 12. Progress Mode
+## 15. Progress Mode
 
 - Analyze the same action twice first (Serve Photo Analysis or Stroke Video Analysis; only successful measurements are saved)
 - In the sidebar, set Analysis Type to "Progress" and pick the action you just analyzed
@@ -126,25 +149,28 @@ streamlit run streamlit_app.py
 - Tick the Delete box beside one record (note its date/time), click "Delete Selected Records", then click "Cancel" — confirm: nothing is deleted; the record is still listed and the chart is unchanged
 - Tick the same record again, click "Delete Selected Records", then "Confirm Delete" — confirm: only that record disappears from the table, the chart redraws from the remaining records only (its points renumber from 1 over the records that remain, and the date sections recompute over the survivors), and every unmarked record (including other strokes saved from the same video, and records of other stroke types) is unchanged
 
-## 13. Interface Wording and Multi-Stroke Clips
+## 16. Interface Wording and Multi-Stroke Clips
 
 - Confirm: titles, labels, and buttons use consistent Title Case throughout the website and CLI (e.g. Analysis Settings, Stroke Type, Analyze All Strokes), and result values read Yes / No / Angle in Range
 - Confirm: the word "Heuristic" no longer appears in the interface
 - Confirm: the Progress table header reads "Analysis Result" (not "Main Issue"), and in-range records show a positive result (e.g. Angle in Range) instead of an issue
 - Multi-stroke clip check: analyze a clip containing 2 swings and confirm the Backswing, Contact, and Follow-Through times all come from the same swing, in the order Backswing < Contact < Follow-Through
 
-## 14. Pass Criteria
+## 17. Pass Criteria
 
 - [ ] (Optional) Photo analysis correct
 - [ ] Serve video finds the serve motion
-- [ ] Forehand video finds the swing
-- [ ] Backhand (one + two handed) videos find the swing
-- [ ] Slice (forehand + backhand) videos find the swing
-- [ ] Volley (forehand + backhand) videos find the volley motion
-- [ ] Overhead video finds the overhead motion
-- [ ] Drop-shot video finds the drop-shot motion
-- [ ] Lob video finds the lob motion
-- [ ] Half-volley video finds the half-volley motion
+- [ ] Forehand: Topspin video finds the swing
+- [ ] Forehand: Slice video finds the swing
+- [ ] Backhand: Topspin – Two-Handed video finds the swing
+- [ ] Backhand: Topspin – One-Handed video finds the swing
+- [ ] Backhand: Slice video finds the swing
+- [ ] Volley: Forehand video finds the volley motion
+- [ ] Volley: Backhand video finds the volley motion
+- [ ] Half-Volley: Forehand video finds the half-volley motion
+- [ ] Overhead Smash video finds the overhead motion
+- [ ] Drop Shot: Forehand video finds the drop-shot motion
+- [ ] Lob: Forehand video finds the lob motion
 - [ ] Website Stroke Video Analysis mode analyzes a clip and shows results
 - [ ] Progress mode chart and table show repeated measurements for one action
 - [ ] Progress selective deletion: marked records are deleted after confirmation (cancel deletes nothing), and the chart and table keep only the remaining records
@@ -154,13 +180,13 @@ streamlit run streamlit_app.py
 - [ ] Front/side views: no misjudgment or crash
 - [ ] All tests pass
 
-## 15. After Verification
+## 18. After Verification
 
 1. Update README: change all 12 actions' status from "✅ Implemented" to "✅ Verified" with one-line descriptions
 2. Commit: `Tennis360-serve-fh-bh: verify all 12 actions on real footage`
 3. Send me any bugs you find
 
-## 16. Multi-Stroke Video Analysis
+## 19. Multi-Stroke Video Analysis
 
 A practice video holds one stroke performed many times; every stroke must be analyzed and recorded separately. Strokes are found by a sequential scan: each stroke is located by a fresh search that starts after the previous stroke completed, so separate strokes can never be merged into one.
 
